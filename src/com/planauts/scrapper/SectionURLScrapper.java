@@ -3,8 +3,7 @@ package com.planauts.scrapper;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -13,39 +12,62 @@ import com.planauts.bean.SectionURLBean;
 import com.planauts.common.Constants;
 
 public class SectionURLScrapper {
-	
-	public Constants a;
-	
-	public SectionURLScrapper(){
+	public SectionURLScrapper(){}
+	private volatile boolean parsingComplete = false;
+	public boolean parsingComplete(){
+		return parsingComplete;
 	}
 	
-	public volatile boolean parsingComplete = true;
+	private SectionURLBean sectionUrlBeans;
+	public SectionURLBean sectionUrlBeans(){
+		return sectionUrlBeans;
+	}
+	
 	private XmlPullParserFactory xmlFactoryObject;
-	 
-	public List<SectionURLBean> parseXMLAndStoreIt(XmlPullParser myParser) {
-		List<SectionURLBean> returnList = new ArrayList<SectionURLBean>();
+	
+	private void parseXMLAndStoreIt(XmlPullParser myParser) {
 		int eventType;
       
       try {
     	  String name;
+    	  HashMap<String, String> map = null;
+    	  HashMap<String, String> vod = null;
+    	  HashMap<String, String> special = null;
+    	  HashMap<String, String> program = null;
     	  for(eventType = myParser.getEventType(); eventType != XmlPullParser.END_DOCUMENT; eventType = myParser.next()){
     		  switch(eventType){
     		  case XmlPullParser.START_TAG:
     			  name = myParser.getName();
+    			  if(!name.equalsIgnoreCase("outline")){
+    				  break;
+    			  }
+    			  if(myParser.getAttributeValue(null, "text").equalsIgnoreCase("VOD")){
+    				  map = new HashMap<String, String>();
+    				  break;
+    			  }
+    			  else if(myParser.getAttributeValue(null, "text").equalsIgnoreCase("Program")){
+    				  vod = map;
+    				  map = new HashMap<String, String>();
+  				  	  break;
+    			  }
+    			  else if(myParser.getAttributeValue(null, "text").equalsIgnoreCase("Special")){
+      				  program = map;
+    				  map = new HashMap<String, String>();
+      				  break;
+      			  }
+    			  
     			  if(name.equalsIgnoreCase("outline")){
-    				  if(!myParser.getAttributeValue(null, "text").equalsIgnoreCase("VOD")){
-    					  returnList.add(new SectionURLBean(
-    					  myParser.getAttributeValue(null, "text"), myParser.getAttributeValue(null, "url")
-    							  ));
-    				  }
+    				  map.put(myParser.getAttributeValue(null, "text"), myParser.getAttributeValue(null, "url"));
     			  }
     			  break;
     		  }
-    	  }  
+    	  }
+    	  special = map;
+    	  sectionUrlBeans = new SectionURLBean(vod, program, special);
+    	  parsingComplete = true;
       } catch (Exception e) {
          e.printStackTrace();
       }
-	return null;
    }
 	
    public void fetchXML(){
@@ -76,12 +98,6 @@ public class SectionURLScrapper {
             }
         }
     });
-
     thread.start(); 
-
-
    }	
-	
-	
-	
 }
