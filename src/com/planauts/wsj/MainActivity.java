@@ -63,8 +63,6 @@ public class MainActivity extends ActionBarActivity implements
 		for(int i = 0; i<b.size(); i++){
 			System.out.println(b.get(i));
 		}
-		
-//		
 	}
 
 	@Override

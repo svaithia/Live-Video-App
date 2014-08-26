@@ -27,7 +27,7 @@ public class PlaylistURLScrapper {
 		return parsingComplete;
 	}
 	
-	private List<PlaylistBean> playlistUrlBeans;
+	private List<PlaylistBean> playlistUrlBeans = new ArrayList<PlaylistBean>();
 	public List<PlaylistBean> playlistUrlBeans(){
 		return playlistUrlBeans;
 	}
@@ -39,44 +39,22 @@ public class PlaylistURLScrapper {
 		playlistUrlBeans = new ArrayList<PlaylistBean>();
       
       try {
-    	  String name;
-    	  for(eventType = myParser.getEventType(); eventType != XmlPullParser.END_DOCUMENT; eventType = myParser.next()){
-    		  if(eventType == XmlPullParser.START_TAG){
-    			  name = myParser.getName();
-    			  if(name.equalsIgnoreCase("item")){
-    				  
-    				  
-    				  
-    				  
-    				  PlaylistBean pb = new PlaylistBean();
-//    				  do{
-//    					  eventType = myParser.getEventType();
-//    					  if(eventType == XmlPullParser.START_TAG){
-//    						  name = myParser.getName();
-//    						  
-//    						  if(name.equalsIgnoreCase("title")){
-//    	    					  pb.title(readTextByTag(myParser,"title"));
-//    						  }
-//    						  else if(name.equalsIgnoreCase("pubDate")){
-//        	    				  pb.pubDate(myParser.getText());
-//    						  }
-//    						  else if(name.equalsIgnoreCase("description")){
-//        	    				  pb.description(myParser.getText());
-//    						  }
-//    						  else if(name.equalsIgnoreCase("media:content") && myParser.getAttributeValue(null, "height").equals("" + height)){
-//        	    				  pb.url(myParser.getAttributeValue(null, "url"));
-//    						  }
-//    						  else if(name.equalsIgnoreCase("media:thumbnail") && myParser.getAttributeValue(null, "height").equals("" + 94)){
-//        	    				  pb.image(myParser.getAttributeValue(null, "url"));
-//    						  }
-//    						  
-//    					  }
-//    					  eventType = myParser.next();
-//    				  } while(eventType != XmlPullParser.END_TAG && (myParser.getName() == null || !myParser.getName().equalsIgnoreCase("item")));
-    			  }
-    		  }
-    	  }
-    	  parsingComplete = true;
+    	    String name;
+    	    while (myParser.next() != XmlPullParser.END_TAG){
+    	        if (myParser.getEventType() != XmlPullParser.START_TAG) {
+    	            continue;
+    	        }
+    	        name = myParser.getName();
+    	        // Starts by looking for the entry tag
+    	        if (name.equals("item")) {
+    	        	playlistUrlBeans.add(readItem(myParser));
+    	        } else if(name.equals("channel")){
+    	        
+    	        }else {
+    	            skip(myParser);
+    	        }
+    	    }
+    	    parsingComplete = true;
       } catch (Exception e) {
          e.printStackTrace();
       }
@@ -95,16 +73,19 @@ public class PlaylistURLScrapper {
 			  conn.setDoInput(true);
 			  conn.connect();
             InputStream stream = conn.getInputStream();
-
+            	
             xmlFactoryObject = XmlPullParserFactory.newInstance();
             XmlPullParser myparser = xmlFactoryObject.newPullParser();
 
             myparser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES
             , false);
+            
             myparser.setInput(stream, null);
+            myparser.nextTag();
             parseXMLAndStoreIt(myparser);
             stream.close();
             } catch (Exception e) {
+            	System.out.println("sds");
                e.printStackTrace();
             }
         }
@@ -129,13 +110,6 @@ public class PlaylistURLScrapper {
 	    parser.require(XmlPullParser.END_TAG, null, tag);
 	    return text;
 	}
-	
-	private String readTextByTagAttribute(XmlPullParser parser, String tag, String attribute) throws IOException, XmlPullParserException {
-	    parser.require(XmlPullParser.START_TAG, null, tag);
-	    String text = parser.getAttributeValue(null, attribute);
-	    parser.require(XmlPullParser.END_TAG, null, tag);
-	    return text;
-	}
    
 	private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
 	    if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -155,7 +129,7 @@ public class PlaylistURLScrapper {
 	 }
    
 	private PlaylistBean readItem(XmlPullParser parser) throws XmlPullParserException, IOException {
-	    parser.require(XmlPullParser.START_TAG, null, "entry");
+	    parser.require(XmlPullParser.START_TAG, null, "item");
 	    String title = null;
 	    String description = null;
 	    String url = null;
@@ -172,15 +146,23 @@ public class PlaylistURLScrapper {
 	            title = readTextByTag(parser, "title");
 	        } else if (name.equalsIgnoreCase("description")) {
 	            description = readTextByTag(parser, "description");
-	        } else if (name.equalsIgnoreCase("media:content") && parser.getAttributeValue(null, "height").equals(height)){
-	        	url = readTextByTagAttribute(parser, "", "url");
-	        } else if(name.equalsIgnoreCase("media:thumbnail") && parser.getAttributeValue(null, "height").equals(94)){
-	        	image = readTextByTagAttribute(parser, "", "url");
-	        } else if(name.equalsIgnoreCase("pubDate")){
+	            
+	        } else if(name.equalsIgnoreCase("media:group")){
+	        	while(parser.next() != XmlPullParser.END_TAG){
+	        		name = parser.getName();
+	        		String u = parser.getAttributeValue("", "url");
+	        		String h = parser.getAttributeValue("", "height");
+	        		if(name.equalsIgnoreCase("media:thumbnail") && u != null && h != null && Integer.valueOf(h) == 94){
+			        	image = u;
+			        } else if(name.equalsIgnoreCase("media:content") && u != null && h != null && Integer.valueOf(h) == height){
+			        	url = u;
+			        	duration = Integer.valueOf(parser.getAttributeValue("", "duration"));
+			        }
+	        		skip(parser);
+	        	}
+	        }  else if(name.equalsIgnoreCase("pubDate")){
 	        	pubDate = readTextByTag(parser, "pubDate");
-	        } else if(name.equalsIgnoreCase("duration")){
-	        	duration = Integer.valueOf(readTextByTag(parser, "duration"));
-	        } else {
+	        }  else {
 	            skip(parser);
 	        }
 	    }
