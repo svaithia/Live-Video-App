@@ -1,5 +1,8 @@
 package com.planauts.wsj;
 
+import java.util.Arrays;
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.planauts.bean.PlaylistBean;
 import com.planauts.bean.SectionURLBean;
+import com.planauts.scrapper.PlaylistURLScrapper;
 import com.planauts.scrapper.SectionURLScrapper;
 
 public class MainActivity extends ActionBarActivity implements
@@ -27,7 +32,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	/**
 	 * Used to store the last screen title. For use in
-	 * {@link #restoreActionBar()}.
+	 * {@url #restoreActionBar()}.
 	 */
 	private CharSequence mTitle;
 
@@ -44,11 +49,22 @@ public class MainActivity extends ActionBarActivity implements
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 //////////////////////////////////////////////////////////////////////////
-		SectionURLScrapper a = new SectionURLScrapper();
+//		SectionURLScrapper a = new SectionURLScrapper();
+//		a.fetchXML();
+//		while(!a.parsingComplete());
+//		SectionURLBean b = a.sectionUrlBeans();
+//		System.out.println(b);		
+//		
+		
+		PlaylistURLScrapper a = new PlaylistURLScrapper("",360);
 		a.fetchXML();
 		while(!a.parsingComplete());
-		SectionURLBean b = a.sectionUrlBeans();
-		System.out.println(b);		
+		List<PlaylistBean> b = a.playlistUrlBeans();
+		for(int i = 0; i<b.size(); i++){
+			System.out.println(b.get(i));
+		}
+		
+//		
 	}
 
 	@Override

@@ -1,11 +1,14 @@
 package com.planauts.scrapper;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import com.planauts.bean.PlaylistBean;
@@ -17,7 +20,7 @@ public class PlaylistURLScrapper {
 		url = u;
 		height = h;
 		url = "http://a1731.g.akamai.net/f/1731/67675/2m/video-api.wsj.com/mw2/mediarss/wsjdn/wsjtv.asp?type=playlist&query=Most+Viewed+WSJ+Videos";
-		height = 540;
+		height = 360;
 	}
 	private volatile boolean parsingComplete = false;
 	public boolean parsingComplete(){
@@ -25,7 +28,7 @@ public class PlaylistURLScrapper {
 	}
 	
 	private List<PlaylistBean> playlistUrlBeans;
-	public List<PlaylistBean> sectionUrlBeans(){
+	public List<PlaylistBean> playlistUrlBeans(){
 		return playlistUrlBeans;
 	}
 	
@@ -33,6 +36,7 @@ public class PlaylistURLScrapper {
 	
 	private void parseXMLAndStoreIt(XmlPullParser myParser) {
 		int eventType;
+		playlistUrlBeans = new ArrayList<PlaylistBean>();
       
       try {
     	  String name;
@@ -40,30 +44,35 @@ public class PlaylistURLScrapper {
     		  if(eventType == XmlPullParser.START_TAG){
     			  name = myParser.getName();
     			  if(name.equalsIgnoreCase("item")){
+    				  
+    				  
+    				  
+    				  
     				  PlaylistBean pb = new PlaylistBean();
-    				  while(eventType != XmlPullParser.END_TAG && !myParser.getName().equalsIgnoreCase("item")){
-    					  eventType = myParser.getEventType();
-    					  if(eventType == XmlPullParser.START_TAG){
-    						  name = myParser.getName();
-    						  if(name.equalsIgnoreCase("title")){
-    	    					  
-    						  }
-    						  else if(name.equalsIgnoreCase("link")){
-        	    				  
-    						  }
-    						  else if(name.equalsIgnoreCase("pubDate")){
-        	    				  
-    						  }
-    						  else if(name.equalsIgnoreCase("description")){
-        	    				  
-    						  }
-    						  else if(name.equalsIgnoreCase("media:title")){
-        	    				  
-    						  }
-    					  }
-    					  eventType = myParser.next();
-    				  }
-    				  playlistUrlBeans.add(pb);
+//    				  do{
+//    					  eventType = myParser.getEventType();
+//    					  if(eventType == XmlPullParser.START_TAG){
+//    						  name = myParser.getName();
+//    						  
+//    						  if(name.equalsIgnoreCase("title")){
+//    	    					  pb.title(readTextByTag(myParser,"title"));
+//    						  }
+//    						  else if(name.equalsIgnoreCase("pubDate")){
+//        	    				  pb.pubDate(myParser.getText());
+//    						  }
+//    						  else if(name.equalsIgnoreCase("description")){
+//        	    				  pb.description(myParser.getText());
+//    						  }
+//    						  else if(name.equalsIgnoreCase("media:content") && myParser.getAttributeValue(null, "height").equals("" + height)){
+//        	    				  pb.url(myParser.getAttributeValue(null, "url"));
+//    						  }
+//    						  else if(name.equalsIgnoreCase("media:thumbnail") && myParser.getAttributeValue(null, "height").equals("" + 94)){
+//        	    				  pb.image(myParser.getAttributeValue(null, "url"));
+//    						  }
+//    						  
+//    					  }
+//    					  eventType = myParser.next();
+//    				  } while(eventType != XmlPullParser.END_TAG && (myParser.getName() == null || !myParser.getName().equalsIgnoreCase("item")));
     			  }
     		  }
     	  }
@@ -102,5 +111,80 @@ public class PlaylistURLScrapper {
     });
     thread.start(); 
    }	
+   
+	// For the tags title and summary, extracts their text values.
+	private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
+	    String result = "";
+	    if (parser.next() == XmlPullParser.TEXT) {
+	        result = parser.getText();
+	        parser.nextTag();
+	    }
+	    return result;
+	}
+	
+	// Processes title tags in the feed.
+	private String readTextByTag(XmlPullParser parser, String tag) throws IOException, XmlPullParserException {
+	    parser.require(XmlPullParser.START_TAG, null, tag);
+	    String text = readText(parser);
+	    parser.require(XmlPullParser.END_TAG, null, tag);
+	    return text;
+	}
+	
+	private String readTextByTagAttribute(XmlPullParser parser, String tag, String attribute) throws IOException, XmlPullParserException {
+	    parser.require(XmlPullParser.START_TAG, null, tag);
+	    String text = parser.getAttributeValue(null, attribute);
+	    parser.require(XmlPullParser.END_TAG, null, tag);
+	    return text;
+	}
+   
+	private void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
+	    if (parser.getEventType() != XmlPullParser.START_TAG) {
+	        throw new IllegalStateException();
+	    }
+	    int depth = 1;
+	    while (depth != 0) {
+	        switch (parser.next()) {
+	        case XmlPullParser.END_TAG:
+	            depth--;
+	            break;
+	        case XmlPullParser.START_TAG:
+	            depth++;
+	            break;
+	        }
+	    }
+	 }
+   
+	private PlaylistBean readItem(XmlPullParser parser) throws XmlPullParserException, IOException {
+	    parser.require(XmlPullParser.START_TAG, null, "entry");
+	    String title = null;
+	    String description = null;
+	    String url = null;
+	    String image = null;
+	    String pubDate = null;
+	    int duration = 0;
+	    
+	    while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        String name = parser.getName();
+	        if (name.equals("title")) {
+	            title = readTextByTag(parser, "title");
+	        } else if (name.equalsIgnoreCase("description")) {
+	            description = readTextByTag(parser, "description");
+	        } else if (name.equalsIgnoreCase("media:content") && parser.getAttributeValue(null, "height").equals(height)){
+	        	url = readTextByTagAttribute(parser, "", "url");
+	        } else if(name.equalsIgnoreCase("media:thumbnail") && parser.getAttributeValue(null, "height").equals(94)){
+	        	image = readTextByTagAttribute(parser, "", "url");
+	        } else if(name.equalsIgnoreCase("pubDate")){
+	        	pubDate = readTextByTag(parser, "pubDate");
+	        } else if(name.equalsIgnoreCase("duration")){
+	        	duration = Integer.valueOf(readTextByTag(parser, "duration"));
+	        } else {
+	            skip(parser);
+	        }
+	    }
+	    return new PlaylistBean(title, description, url, image, pubDate, duration);
+	}
 	
 }
