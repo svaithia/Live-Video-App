@@ -3,12 +3,10 @@ package com.planauts.wsj;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -24,28 +22,20 @@ import android.widget.Toast;
 import com.planauts.bean.SectionURLBean;
 import com.planauts.scrapper.SectionURLScrapper;
 import com.planauts.slidingmenu.adapter.NavDrawerListAdapter;
-import com.planauts.slidingmenu.model.NavDrawerGroup;
-import com.planauts.slidingmenu.model.NavDrawerItem;
 
 public class MainActivity extends Activity {
     private DrawerLayout mDrawerLayout;
     private ExpandableListView expListView;
     private ActionBarDrawerToggle mDrawerToggle;
- 
+
+	NavDrawerListAdapter navDrawerListAdapter;
+	
     // nav drawer title
     private CharSequence mDrawerTitle;
  
     // used to store app title
     private CharSequence mTitle;
 
-    // slide menu items
-    private String[] navMenuTitles;
-    private TypedArray navMenuIcons;
- 
-    private ArrayList<String> strings;
-    private NavDrawerListAdapter adapter;
-    
-	NavDrawerListAdapter listAdapter;
 	
 	List<String> listDataHeader;
 	HashMap<String, List<String>> listDataChild;
@@ -54,26 +44,15 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
- 
+
         mTitle = mDrawerTitle = getTitle();
  
-        // load slide menu items
-        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
- 
-        // nav drawer icons from resources
-        navMenuIcons = getResources()
-                .obtainTypedArray(R.array.nav_drawer_icons);
- 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        expListView = (ExpandableListView) findViewById(R.id.list_slidermenu);
- 
-        // Recycle the typed array
-        navMenuIcons.recycle();
+        expListView = (ExpandableListView) findViewById(R.id.elvSliderMenu);
  
         prepareListData();
-        listAdapter = new NavDrawerListAdapter(this, listDataHeader, listDataChild);
-        expListView.setAdapter(listAdapter);
-        
+        navDrawerListAdapter = new NavDrawerListAdapter(this, listDataHeader, listDataChild);
+        expListView.setAdapter(navDrawerListAdapter);
         
         // enabling action bar app icon and behaving it as toggle button
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -234,7 +213,7 @@ public class MainActivity extends Activity {
 //        }
     }
     
-	private void prepareListData() {
+	private void prepareListData(){
 		SectionURLScrapper sectionUrlScrapperObj = new SectionURLScrapper();
 		sectionUrlScrapperObj.fetchXML();
 		while(!sectionUrlScrapperObj.parsingComplete());

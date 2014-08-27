@@ -6,14 +6,28 @@
     android:layout_height="match_parent">
  
     <!-- Framelayout to display Fragments -->
-    <FrameLayout
+    <ScrollView
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+        
+        <ListView
+	        android:id="@+id/lvVideos"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_gravity="start"
+	        android:choiceMode="singleChoice"
+	        android:divider="@color/list_divider"
+	        android:dividerHeight="1dp"
+	        android:listSelector="@drawable/list_selector"
+	        android:background="@color/list_background"/>
+        
+        
+	</ScrollView>
  
     <!-- Listview to display slider menu -->
     <ExpandableListView
-        android:id="@+id/list_slidermenu"
+        android:id="@+id/elvSliderMenu"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
