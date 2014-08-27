@@ -17,18 +17,24 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.planauts.bean.PlaylistBean;
 import com.planauts.bean.SectionURLBean;
+import com.planauts.listadapters.NavDrawerListAdapter;
+import com.planauts.listadapters.VideoListAdapter;
+import com.planauts.scrapper.PlaylistURLScrapper;
 import com.planauts.scrapper.SectionURLScrapper;
-import com.planauts.slidingmenu.adapter.NavDrawerListAdapter;
 
 public class MainActivity extends Activity {
     private DrawerLayout mDrawerLayout;
-    private ExpandableListView expListView;
+    private ExpandableListView elvNav;
+    private ListView lvVideos;
     private ActionBarDrawerToggle mDrawerToggle;
 
 	NavDrawerListAdapter navDrawerListAdapter;
+	VideoListAdapter videoListAdapter;
 	
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -36,7 +42,6 @@ public class MainActivity extends Activity {
     // used to store app title
     private CharSequence mTitle;
 
-	
 	List<String> listDataHeader;
 	HashMap<String, List<String>> listDataChild;
  
@@ -48,11 +53,15 @@ public class MainActivity extends Activity {
         mTitle = mDrawerTitle = getTitle();
  
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        expListView = (ExpandableListView) findViewById(R.id.elvSliderMenu);
+        elvNav = (ExpandableListView) findViewById(R.id.elvSliderMenu);
  
         prepareListData();
         navDrawerListAdapter = new NavDrawerListAdapter(this, listDataHeader, listDataChild);
-        expListView.setAdapter(navDrawerListAdapter);
+        elvNav.setAdapter(navDrawerListAdapter);
+        
+        lvVideos = (ListView) findViewById(R.id.lvVideos);
+        videoListTest();
+        lvVideos.setAdapter(videoListAdapter);
         
         // enabling action bar app icon and behaving it as toggle button
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -81,7 +90,7 @@ public class MainActivity extends Activity {
             // on first time display view for first nav item
 //            displayView(0);
         }
-        expListView.setOnChildClickListener(new OnChildClickListener() {
+        elvNav.setOnChildClickListener(new OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                      int groupPosition, int childPosition, long id) {
@@ -91,7 +100,7 @@ public class MainActivity extends Activity {
         });
         
         // Listview Group expanded listener
-        expListView.setOnGroupExpandListener(new OnGroupExpandListener() {
+        elvNav.setOnGroupExpandListener(new OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
                 Toast.makeText(getApplicationContext(), groupPosition + " Expanded",
@@ -100,7 +109,7 @@ public class MainActivity extends Activity {
         });
         
      // Listview Group collasped listener
-        expListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
+        elvNav.setOnGroupCollapseListener(new OnGroupCollapseListener() {
             @Override
             public void onGroupCollapse(int groupPosition) {
                 Toast.makeText(getApplicationContext(), groupPosition + " Collapsed",
@@ -137,7 +146,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // if nav drawer is opened, hide the action items
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(expListView);
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(elvNav);
         menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -230,6 +239,14 @@ public class MainActivity extends Activity {
         listDataChild.put(listDataHeader.get(0), new ArrayList<String>(sectionUrlBeanObj.vod.keySet())); // Header, Child data
         listDataChild.put(listDataHeader.get(1), new ArrayList<String>(sectionUrlBeanObj.program.keySet()));
         listDataChild.put(listDataHeader.get(2), new ArrayList<String>(sectionUrlBeanObj.program.keySet()));
+	}
+	
+	private void videoListTest(){
+		PlaylistURLScrapper playlistUrlScrapperObj = new PlaylistURLScrapper("",0);
+		playlistUrlScrapperObj.fetchXML();
+		while(!playlistUrlScrapperObj.parsingComplete());
+		List<PlaylistBean> playList = playlistUrlScrapperObj.playlistUrlBeans();
+		videoListAdapter = new VideoListAdapter(getApplicationContext(), playList);
 	}
 }
     
