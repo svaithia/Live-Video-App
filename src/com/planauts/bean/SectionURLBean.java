@@ -1,13 +1,14 @@
 package com.planauts.bean;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class SectionURLBean {
-	public HashMap<String, String> vod;
-	public HashMap<String, String> program;
-	public HashMap<String, String> special;
+	public LinkedHashMap<String, String> vod;
+	public LinkedHashMap<String, String> program;
+	public LinkedHashMap<String, String> special;
 	
-	public SectionURLBean(HashMap<String, String> v, HashMap<String, String> p, HashMap<String, String> s){
+	public SectionURLBean(LinkedHashMap<String, String> v, LinkedHashMap<String, String> p, LinkedHashMap<String, String> s){
 		vod = v;
 		program = p;
 		special = s;
@@ -17,17 +18,17 @@ public class SectionURLBean {
 		StringBuilder a = new StringBuilder();
 
 		a.append("VOD BEGIN\n");
-		for (String key : vod.keySet()) {
+		for (Map.Entry<String,String> key : vod.entrySet()) {
 		    a.append(key + " - " + vod.get(key) + "\n");
 		}
 		a.append("VOD END\n");
 		a.append("PRORGRAM BEGIN\n");
-		for (String key : program.keySet()) {
+		for (Map.Entry<String,String> key : program.entrySet()) {
 		    a.append(key + " - " + program.get(key) + "\n");
 		}
 		a.append("PRORGRAM END\n");
 		a.append("SPECIAL BEGIN\n");
-		for (String key : special.keySet()) {
+		for (Map.Entry<String,String> key : special.entrySet()) {
 		    a.append(key + " - " + special.get(key) + "\n");
 		}
 		a.append("SPECIAL END\n");

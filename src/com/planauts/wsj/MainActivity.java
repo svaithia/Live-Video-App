@@ -3,16 +3,15 @@ package com.planauts.wsj;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,11 +21,15 @@ import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.Toast;
 
+import com.planauts.bean.SectionURLBean;
+import com.planauts.scrapper.SectionURLScrapper;
 import com.planauts.slidingmenu.adapter.NavDrawerListAdapter;
+import com.planauts.slidingmenu.model.NavDrawerGroup;
+import com.planauts.slidingmenu.model.NavDrawerItem;
 
 public class MainActivity extends Activity {
     private DrawerLayout mDrawerLayout;
-    private ExpandableListView mDrawerList;
+    private ExpandableListView expListView;
     private ActionBarDrawerToggle mDrawerToggle;
  
     // nav drawer title
@@ -41,6 +44,11 @@ public class MainActivity extends Activity {
  
     private ArrayList<String> strings;
     private NavDrawerListAdapter adapter;
+    
+	NavDrawerListAdapter listAdapter;
+	
+	List<String> listDataHeader;
+	HashMap<String, List<String>> listDataChild;
  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,43 +65,16 @@ public class MainActivity extends Activity {
                 .obtainTypedArray(R.array.nav_drawer_icons);
  
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ExpandableListView) findViewById(R.id.list_slidermenu);
- 
-        strings = new ArrayList<String>();
+        expListView = (ExpandableListView) findViewById(R.id.list_slidermenu);
  
         // Recycle the typed array
         navMenuIcons.recycle();
  
-        List<String> parentList = new ArrayList<String>();
-        parentList.add(new String("A"));
-        parentList.add(new String("B"));
-        parentList.add(new String("C"));
+        prepareListData();
+        listAdapter = new NavDrawerListAdapter(this, listDataHeader, listDataChild);
+        expListView.setAdapter(listAdapter);
         
-        List<String> aChild = new ArrayList<String>();
-        parentList.add(new String("AA"));
-        parentList.add(new String("AAA"));
-        parentList.add(new String("AAAA"));
         
-        List<String> bChild = new ArrayList<String>();
-        parentList.add(new String("BB"));
-        parentList.add(new String("BBB"));
-        parentList.add(new String("BBBB"));
-        
-        List<String> cChild = new ArrayList<String>();
-        parentList.add(new String("CC"));
-        parentList.add(new String("CCC"));
-        parentList.add(new String("CCCC"));
-        
-        HashMap<String, List<String>> childrenMap = new HashMap<String, List<String>>();
-        childrenMap.put(parentList.get(0), aChild);
-        childrenMap.put(parentList.get(1), bChild);
-        childrenMap.put(parentList.get(2), cChild);
-        
-        // setting the nav drawer list adapter
-        adapter = new NavDrawerListAdapter(getApplicationContext(), parentList, childrenMap);
-        
-        mDrawerList.setAdapter(adapter);
- 
         // enabling action bar app icon and behaving it as toggle button
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
@@ -121,33 +102,33 @@ public class MainActivity extends Activity {
             // on first time display view for first nav item
 //            displayView(0);
         }
-//        mDrawerList.setOnChildClickListener(new OnChildClickListener() {
-//            @Override
-//            public boolean onChildClick(ExpandableListView parent, View v,
-//                    int groupPosition, int childPosition, long id) {
-//                Toast.makeText(getApplicationContext(), groupPosition + " " + childPosition, Toast.LENGTH_SHORT).show();
-//                return false;
-//            }
-//        });
-//        
-//        // Listview Group expanded listener
-//        mDrawerList.setOnGroupExpandListener(new OnGroupExpandListener() {
-//            @Override
-//            public void onGroupExpand(int groupPosition) {
-//                Toast.makeText(getApplicationContext(), groupPosition + " Expanded",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        
-//     // Listview Group collasped listener
-//        mDrawerList.setOnGroupCollapseListener(new OnGroupCollapseListener() {
-//            @Override
-//            public void onGroupCollapse(int groupPosition) {
-//                Toast.makeText(getApplicationContext(), groupPosition + " Collapsed",
-//                        Toast.LENGTH_SHORT).show();
-//         
-//            }
-//        });
+        expListView.setOnChildClickListener(new OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v,
+                     int groupPosition, int childPosition, long id) {
+                Toast.makeText(getApplicationContext(), groupPosition + " " + childPosition, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+        
+        // Listview Group expanded listener
+        expListView.setOnGroupExpandListener(new OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                Toast.makeText(getApplicationContext(), groupPosition + " Expanded",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        
+     // Listview Group collasped listener
+        expListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                Toast.makeText(getApplicationContext(), groupPosition + " Collapsed",
+                        Toast.LENGTH_SHORT).show();
+         
+            }
+        });
     }
  
     @Override
@@ -177,7 +158,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // if nav drawer is opened, hide the action items
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(expListView);
         menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -252,5 +233,24 @@ public class MainActivity extends Activity {
 //            Log.e("MainActivity", "Error in creating fragment");
 //        }
     }
+    
+	private void prepareListData() {
+		SectionURLScrapper sectionUrlScrapperObj = new SectionURLScrapper();
+		sectionUrlScrapperObj.fetchXML();
+		while(!sectionUrlScrapperObj.parsingComplete());
+		SectionURLBean sectionUrlBeanObj = sectionUrlScrapperObj.sectionUrlBeans();
+		
+        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, List<String>>();
+
+        // Adding child data
+        listDataHeader.add("Videos");
+        listDataHeader.add("Programs");
+        listDataHeader.add("Specials");
+        
+        listDataChild.put(listDataHeader.get(0), new ArrayList<String>(sectionUrlBeanObj.vod.keySet())); // Header, Child data
+        listDataChild.put(listDataHeader.get(1), new ArrayList<String>(sectionUrlBeanObj.program.keySet()));
+        listDataChild.put(listDataHeader.get(2), new ArrayList<String>(sectionUrlBeanObj.program.keySet()));
+	}
 }
     
