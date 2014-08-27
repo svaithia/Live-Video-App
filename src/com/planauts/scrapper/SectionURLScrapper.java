@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -30,10 +31,10 @@ public class SectionURLScrapper {
       
       try {
     	  String name;
-    	  HashMap<String, String> map = null;
-    	  HashMap<String, String> vod = null;
-    	  HashMap<String, String> special = null;
-    	  HashMap<String, String> program = null;
+    	  LinkedHashMap<String, String> map = null;
+    	  LinkedHashMap<String, String> vod = null;
+    	  LinkedHashMap<String, String> special = null;
+    	  LinkedHashMap<String, String> program = null;
     	  for(eventType = myParser.getEventType(); eventType != XmlPullParser.END_DOCUMENT; eventType = myParser.next()){
     		  switch(eventType){
     		  case XmlPullParser.START_TAG:
@@ -42,17 +43,17 @@ public class SectionURLScrapper {
     				  break;
     			  }
     			  if(myParser.getAttributeValue(null, "text").equalsIgnoreCase("VOD")){
-    				  map = new HashMap<String, String>();
+    				  map = new LinkedHashMap<String, String>();
     				  break;
     			  }
     			  else if(myParser.getAttributeValue(null, "text").equalsIgnoreCase("Program")){
     				  vod = map;
-    				  map = new HashMap<String, String>();
+    				  map = new LinkedHashMap<String, String>();
   				  	  break;
     			  }
     			  else if(myParser.getAttributeValue(null, "text").equalsIgnoreCase("Special")){
       				  program = map;
-    				  map = new HashMap<String, String>();
+    				  map = new LinkedHashMap<String, String>();
       				  break;
       			  }
     			  

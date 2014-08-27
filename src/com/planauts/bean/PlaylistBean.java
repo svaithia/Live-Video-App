@@ -49,8 +49,4 @@ public class PlaylistBean {
 		return sb.toString();
 	}
 	
-
-	
-	
-	
 }
