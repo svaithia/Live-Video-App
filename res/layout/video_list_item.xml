@@ -13,5 +13,4 @@
         android:layout_centerVertical="true"
         android:gravity="center_vertical"
         android:paddingLeft="30dp"/>
- 
 </RelativeLayout>
