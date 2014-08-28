@@ -19,8 +19,6 @@ public class PlaylistURLScrapper {
 	public PlaylistURLScrapper(String u, int h){
 		url = u;
 		height = h;
-		url = "http://a1731.g.akamai.net/f/1731/67675/2m/video-api.wsj.com/mw2/mediarss/wsjdn/wsjtv.asp?type=playlist&query=Most+Viewed+WSJ+Videos";
-		height = 360;
 	}
 	private volatile boolean parsingComplete = false;
 	public boolean parsingComplete(){

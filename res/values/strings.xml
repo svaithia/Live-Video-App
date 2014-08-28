@@ -2,6 +2,8 @@
 <resources>
 
     <string name="app_name">WSJ</string>
+    <string name="nav_option_open">Navigation Options</string>
+    <string name="nav_option_close">Wall Street Journal</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>

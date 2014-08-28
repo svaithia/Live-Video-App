@@ -40,7 +40,7 @@ public class NavDrawerListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, final int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
-
+		
 		final String child = getChild(groupPosition, childPosition);
 
 		if (convertView == null) {

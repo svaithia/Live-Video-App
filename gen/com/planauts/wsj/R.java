@@ -1296,20 +1296,22 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000b;
-        public static final int action_example=0x7f0a0013;
-        public static final int action_settings=0x7f0a0014;
+        public static final int action_example=0x7f0a0015;
+        public static final int action_settings=0x7f0a0016;
         public static final int app_name=0x7f0a000d;
         /**  Content Description 
          */
-        public static final int desc_list_item_icon=0x7f0a0018;
-        public static final int drawer_close=0x7f0a0017;
-        public static final int drawer_open=0x7f0a0016;
-        public static final int hello_world=0x7f0a0015;
-        public static final int navigation_drawer_close=0x7f0a0012;
-        public static final int navigation_drawer_open=0x7f0a0011;
-        public static final int title_section1=0x7f0a000e;
-        public static final int title_section2=0x7f0a000f;
-        public static final int title_section3=0x7f0a0010;
+        public static final int desc_list_item_icon=0x7f0a001a;
+        public static final int drawer_close=0x7f0a0019;
+        public static final int drawer_open=0x7f0a0018;
+        public static final int hello_world=0x7f0a0017;
+        public static final int nav_option_close=0x7f0a000f;
+        public static final int nav_option_open=0x7f0a000e;
+        public static final int navigation_drawer_close=0x7f0a0014;
+        public static final int navigation_drawer_open=0x7f0a0013;
+        public static final int title_section1=0x7f0a0010;
+        public static final int title_section2=0x7f0a0011;
+        public static final int title_section3=0x7f0a0012;
     }
     public static final class style {
         /** 

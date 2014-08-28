@@ -2,6 +2,7 @@ package com.planauts.wsj;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -22,19 +23,22 @@ import android.widget.Toast;
 
 import com.planauts.bean.PlaylistBean;
 import com.planauts.bean.SectionURLBean;
+import com.planauts.common.Constants;
 import com.planauts.listadapters.NavDrawerListAdapter;
 import com.planauts.listadapters.VideoListAdapter;
 import com.planauts.scrapper.PlaylistURLScrapper;
 import com.planauts.scrapper.SectionURLScrapper;
 
 public class MainActivity extends Activity {
-    private DrawerLayout mDrawerLayout;
+    private DrawerLayout dlNavDrawer;
     private ExpandableListView elvNav;
     private ListView lvVideos;
     private ActionBarDrawerToggle mDrawerToggle;
 
 	NavDrawerListAdapter navDrawerListAdapter;
 	VideoListAdapter videoListAdapter;
+	
+	SectionURLScrapper sectionUrlScrapperObj;
 	
     // nav drawer title
     private CharSequence mDrawerTitle;
@@ -51,73 +55,116 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mTitle = mDrawerTitle = getTitle();
- 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        
+        dlNavDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         elvNav = (ExpandableListView) findViewById(R.id.elvSliderMenu);
+        lvVideos = (ListView) findViewById(R.id.lvVideos);
  
         prepareListData();
         navDrawerListAdapter = new NavDrawerListAdapter(this, listDataHeader, listDataChild);
         elvNav.setAdapter(navDrawerListAdapter);
         
-        lvVideos = (ListView) findViewById(R.id.lvVideos);
-        videoListTest();
-        lvVideos.setAdapter(videoListAdapter);
-        
         // enabling action bar app icon and behaving it as toggle button
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
  
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.drawable.ic_drawer, //nav menu toggle icon
-                R.string.app_name, // nav drawer open - description for accessibility
-                R.string.app_name // nav drawer close - description for accessibility
-        ){
-            public void onDrawerClosed(View view) {
-                getActionBar().setTitle(mTitle);
-                // calling onPrepareOptionsMenu() to show action bar icons
-                invalidateOptionsMenu();
-            }
- 
-            public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(mDrawerTitle);
-                // calling onPrepareOptionsMenu() to hide action bar icons
-                invalidateOptionsMenu();
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle = new ActionBarDrawerToggle(this, dlNavDrawer,
+                R.drawable.ic_drawer, R.string.nav_option_open, R.string.nav_option_close){
+		            public void onDrawerClosed(View view) {
+		                getActionBar().setTitle(mTitle);
+		                invalidateOptionsMenu();
+		            }
+		 
+		            public void onDrawerOpened(View drawerView) {
+		                getActionBar().setTitle(mDrawerTitle);
+		                invalidateOptionsMenu();
+		            }
+        		};
+        dlNavDrawer.setDrawerListener(mDrawerToggle);
  
         if (savedInstanceState == null) {
-            // on first time display view for first nav item
-//            displayView(0);
+        	loadVideosFromUrl(Constants.DEFAULT_CALLING_URL);
         }
-        elvNav.setOnChildClickListener(new OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                     int groupPosition, int childPosition, long id) {
-                Toast.makeText(getApplicationContext(), groupPosition + " " + childPosition, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
         
-        // Listview Group expanded listener
-        elvNav.setOnGroupExpandListener(new OnGroupExpandListener() {
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(), groupPosition + " Expanded",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        elvNav.setOnChildClickListener(new NavListItemClicked());
+        elvNav.setOnGroupExpandListener(new NavListGroupExpand());
+        elvNav.setOnGroupCollapseListener(new NavListGroupCollapse());
         
-     // Listview Group collasped listener
-        elvNav.setOnGroupCollapseListener(new OnGroupCollapseListener() {
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(), groupPosition + " Collapsed",
-                        Toast.LENGTH_SHORT).show();
-         
-            }
-        });
     }
+    //TODO http://stackoverflow.com/questions/8315855/expandablelistview-keep-selected-child-in-a-pressed-state
+    private class NavListItemClicked implements OnChildClickListener{
+		@Override
+		public boolean onChildClick(ExpandableListView parent, View v,
+				int groupPosition, int childPosition, long id) {
+
+			String parentItem = listDataHeader.get(groupPosition);
+			String childItem = listDataChild.get(parentItem).get(childPosition);
+			
+			if(childItem.equalsIgnoreCase("Schedule") || childItem.equalsIgnoreCase("Descriptions") ||
+					childItem.equalsIgnoreCase("Search") || childItem.equalsIgnoreCase("Program List") ||
+					childItem.equalsIgnoreCase("Radio") || childItem.equalsIgnoreCase("Property Search")){
+				dlNavDrawer.closeDrawer(elvNav);
+				Toast.makeText(getApplicationContext(),"Sorry! Cannot select " + childItem + " for now." +
+						"I will implement this feature soon!", Toast.LENGTH_SHORT).show();
+				return false;
+			}
+			
+			LinkedHashMap<String, String> map = returnUrlMapBasedOnUrl(groupPosition);
+			
+			String url = map.get(childItem);
+			
+			loadVideosFromUrl(url);
+			setTitle(childItem);
+			
+			int index = parent.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition));
+		    parent.setItemChecked(index, true);
+			
+			dlNavDrawer.closeDrawer(elvNav);
+			
+			return false;
+		}
+    }
+    
+    private class NavListGroupExpand implements OnGroupExpandListener{
+		@Override
+		public void onGroupExpand(int groupPosition) {
+			
+		}
+        
+    }
+    
+    private class NavListGroupCollapse implements OnGroupCollapseListener{
+		@Override
+		public void onGroupCollapse(int groupPosition) {
+			
+		}
+        
+    }
+    
+    private void loadVideosFromUrl(String url){
+    	PlaylistURLScrapper playlistUrlScrapperObj = new PlaylistURLScrapper(url,360);
+		playlistUrlScrapperObj.fetchXML();
+		while(!playlistUrlScrapperObj.parsingComplete());
+		List<PlaylistBean> playList = playlistUrlScrapperObj.playlistUrlBeans();
+		videoListAdapter = new VideoListAdapter(getApplicationContext(), playList);
+		lvVideos.setAdapter(videoListAdapter);
+    }
+    
+    
+    private LinkedHashMap<String, String> returnUrlMapBasedOnUrl(int groupPosition){
+    	switch(groupPosition){
+		case 0:
+			return  sectionUrlScrapperObj.sectionUrlBeans().vod;
+		case 1:
+			return sectionUrlScrapperObj.sectionUrlBeans().program;
+		case 2:
+			return sectionUrlScrapperObj.sectionUrlBeans().special;
+		default:
+			return null;
+		}
+    }
+    
+    
  
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -146,7 +193,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // if nav drawer is opened, hide the action items
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(elvNav);
+        boolean drawerOpen = dlNavDrawer.isDrawerOpen(elvNav);
         menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -215,7 +262,7 @@ public class MainActivity extends Activity {
 //            mDrawerList.setItemChecked(position, true);
 //            mDrawerList.setSelection(position);
 //            setTitle(navMenuTitles[position]);
-//            mDrawerLayout.closeDrawer(mDrawerList);
+//            dlNavDrawer.closeDrawer(mDrawerList);
 //        } else {
 //            // error in creating fragment
 //            Log.e("MainActivity", "Error in creating fragment");
@@ -223,7 +270,7 @@ public class MainActivity extends Activity {
     }
     
 	private void prepareListData(){
-		SectionURLScrapper sectionUrlScrapperObj = new SectionURLScrapper();
+		sectionUrlScrapperObj = new SectionURLScrapper();
 		sectionUrlScrapperObj.fetchXML();
 		while(!sectionUrlScrapperObj.parsingComplete());
 		SectionURLBean sectionUrlBeanObj = sectionUrlScrapperObj.sectionUrlBeans();
@@ -238,15 +285,9 @@ public class MainActivity extends Activity {
         
         listDataChild.put(listDataHeader.get(0), new ArrayList<String>(sectionUrlBeanObj.vod.keySet())); // Header, Child data
         listDataChild.put(listDataHeader.get(1), new ArrayList<String>(sectionUrlBeanObj.program.keySet()));
-        listDataChild.put(listDataHeader.get(2), new ArrayList<String>(sectionUrlBeanObj.program.keySet()));
+        listDataChild.put(listDataHeader.get(2), new ArrayList<String>(sectionUrlBeanObj.special.keySet()));
 	}
 	
-	private void videoListTest(){
-		PlaylistURLScrapper playlistUrlScrapperObj = new PlaylistURLScrapper("",0);
-		playlistUrlScrapperObj.fetchXML();
-		while(!playlistUrlScrapperObj.parsingComplete());
-		List<PlaylistBean> playList = playlistUrlScrapperObj.playlistUrlBeans();
-		videoListAdapter = new VideoListAdapter(getApplicationContext(), playList);
-	}
+
 }
     
