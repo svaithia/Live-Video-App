@@ -16,8 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ExpandableListView.OnGroupCollapseListener;
-import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -87,8 +85,8 @@ public class MainActivity extends Activity {
         }
         
         elvNav.setOnChildClickListener(new NavListItemClicked());
-        elvNav.setOnGroupExpandListener(new NavListGroupExpand());
-        elvNav.setOnGroupCollapseListener(new NavListGroupCollapse());
+//        elvNav.setOnGroupExpandListener(new NavListGroupExpand());
+//        elvNav.setOnGroupCollapseListener(new NavListGroupCollapse());
         
     }
     //TODO http://stackoverflow.com/questions/8315855/expandablelistview-keep-selected-child-in-a-pressed-state
@@ -116,8 +114,7 @@ public class MainActivity extends Activity {
 			loadVideosFromUrl(url);
 			setTitle(childItem);
 			
-			int index = parent.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition));
-		    parent.setItemChecked(index, true);
+		    parent.setItemChecked(groupPosition+childPosition+1, true);
 			
 			dlNavDrawer.closeDrawer(elvNav);
 			
@@ -125,21 +122,6 @@ public class MainActivity extends Activity {
 		}
     }
     
-    private class NavListGroupExpand implements OnGroupExpandListener{
-		@Override
-		public void onGroupExpand(int groupPosition) {
-			
-		}
-        
-    }
-    
-    private class NavListGroupCollapse implements OnGroupCollapseListener{
-		@Override
-		public void onGroupCollapse(int groupPosition) {
-			
-		}
-        
-    }
     
     private void loadVideosFromUrl(String url){
     	PlaylistURLScrapper playlistUrlScrapperObj = new PlaylistURLScrapper(url,360);

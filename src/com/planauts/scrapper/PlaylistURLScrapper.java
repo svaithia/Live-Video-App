@@ -150,7 +150,7 @@ public class PlaylistURLScrapper {
 	        		name = parser.getName();
 	        		String u = parser.getAttributeValue("", "url");
 	        		String h = parser.getAttributeValue("", "height");
-	        		if(name.equalsIgnoreCase("media:thumbnail") && u != null && h != null && Integer.valueOf(h) == 94){
+	        		if(name.equalsIgnoreCase("media:thumbnail") && u != null && h != null && Integer.valueOf(h) == 270){
 			        	image = u;
 			        } else if(name.equalsIgnoreCase("media:content") && u != null && h != null && Integer.valueOf(h) == height){
 			        	url = u;
