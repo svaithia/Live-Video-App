@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -14,6 +15,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 import com.planauts.bean.PlaylistBean;
 import com.planauts.bean.SectionURLBean;
 import com.planauts.common.Constants;
+import com.planauts.common.VideoPlayer;
 import com.planauts.listadapters.NavDrawerListAdapter;
 import com.planauts.listadapters.VideoListAdapter;
 import com.planauts.scrapper.PlaylistURLScrapper;
@@ -88,7 +92,30 @@ public class MainActivity extends Activity {
 //        elvNav.setOnGroupExpandListener(new NavListGroupExpand());
 //        elvNav.setOnGroupCollapseListener(new NavListGroupCollapse());
         
+        lvVideos.setOnItemClickListener(new VideoListListener());
+        
     }
+    
+    private class VideoListListener implements OnItemClickListener{
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			 
+			 int arrSize = videoListAdapter.getCount() - position;
+			 String[] resourceUrls = new String[arrSize];
+			 for(int i = 0; i<arrSize; i++){
+				 PlaylistBean itemClicked = videoListAdapter.getItem(i+position);
+				 resourceUrls[i] = itemClicked.url();
+			 }
+			 
+			Intent videoPlaybackActivity = new Intent(getApplicationContext(), VideoPlayer.class);
+ 		    videoPlaybackActivity.putExtra("videoPlaylistUrls", resourceUrls);
+ 		    startActivity(videoPlaybackActivity);
+			 
+			
+		}
+    }
+    
     //TODO http://stackoverflow.com/questions/8315855/expandablelistview-keep-selected-child-in-a-pressed-state
     private class NavListItemClicked implements OnChildClickListener{
 		@Override
@@ -121,8 +148,7 @@ public class MainActivity extends Activity {
 			return false;
 		}
     }
-    
-    
+
     private void loadVideosFromUrl(String url){
     	PlaylistURLScrapper playlistUrlScrapperObj = new PlaylistURLScrapper(url,360);
 		playlistUrlScrapperObj.fetchXML();
@@ -145,8 +171,6 @@ public class MainActivity extends Activity {
 			return null;
 		}
     }
-    
-    
  
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

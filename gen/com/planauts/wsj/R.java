@@ -1125,11 +1125,11 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f050023;
         public static final int action_bar_title=0x7f050022;
         public static final int action_context_bar=0x7f05001d;
-        public static final int action_example=0x7f050047;
+        public static final int action_example=0x7f050048;
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
-        public static final int action_settings=0x7f050046;
+        public static final int action_settings=0x7f050047;
         public static final int activity_chooser_view_content=0x7f050025;
         public static final int always=0x7f05000b;
         public static final int beginning=0x7f050011;
@@ -1157,6 +1157,7 @@ containing a value of this type.
         public static final int llThumbnail=0x7f050042;
         public static final int lvVideos=0x7f05003e;
         public static final int middle=0x7f050012;
+        public static final int myvideoview=0x7f050046;
         public static final int never=0x7f050009;
         public static final int none=0x7f050010;
         public static final int normal=0x7f050000;
@@ -1254,6 +1255,7 @@ containing a value of this type.
         public static final int list_item=0x7f030023;
         public static final int support_simple_spinner_dropdown_item=0x7f030024;
         public static final int video_list_item=0x7f030025;
+        public static final int videoplayer=0x7f030026;
     }
     public static final class menu {
         public static final int global=0x7f0d0000;
