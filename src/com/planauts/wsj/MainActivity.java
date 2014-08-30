@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
 		            }
         		};
         dlNavDrawer.setDrawerListener(mDrawerToggle);
- 
+        
         if (savedInstanceState == null) {
         	loadVideosFromUrl(Constants.DEFAULT_CALLING_URL);
         }
@@ -103,13 +103,17 @@ public class MainActivity extends Activity {
 			 
 			 int arrSize = videoListAdapter.getCount() - position;
 			 String[] resourceUrls = new String[arrSize];
+			 String[] resourceTitles = new String[arrSize];
+			 
 			 for(int i = 0; i<arrSize; i++){
 				 PlaylistBean itemClicked = videoListAdapter.getItem(i+position);
 				 resourceUrls[i] = itemClicked.url();
+				 resourceTitles[i] = itemClicked.title();
 			 }
 			 
 			Intent videoPlaybackActivity = new Intent(getApplicationContext(), VideoPlayer.class);
- 		    videoPlaybackActivity.putExtra("videoPlaylistUrls", resourceUrls);
+			videoPlaybackActivity.putExtra("videoPlaylistUrls", resourceUrls);
+			videoPlaybackActivity.putExtra("videoPlaylistTitltes", resourceTitles);
  		    startActivity(videoPlaybackActivity);
 			 
 			

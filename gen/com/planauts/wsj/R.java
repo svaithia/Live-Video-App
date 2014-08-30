@@ -1125,11 +1125,11 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f050023;
         public static final int action_bar_title=0x7f050022;
         public static final int action_context_bar=0x7f05001d;
-        public static final int action_example=0x7f050048;
+        public static final int action_example=0x7f050049;
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
-        public static final int action_settings=0x7f050047;
+        public static final int action_settings=0x7f050048;
         public static final int activity_chooser_view_content=0x7f050025;
         public static final int always=0x7f05000b;
         public static final int beginning=0x7f050011;
@@ -1154,10 +1154,11 @@ containing a value of this type.
         public static final int ivThumbnail=0x7f050043;
         public static final int listMode=0x7f050001;
         public static final int list_item=0x7f050029;
+        public static final int llPlayerContainer=0x7f050046;
         public static final int llThumbnail=0x7f050042;
         public static final int lvVideos=0x7f05003e;
         public static final int middle=0x7f050012;
-        public static final int myvideoview=0x7f050046;
+        public static final int myvideoview=0x7f050047;
         public static final int never=0x7f050009;
         public static final int none=0x7f050010;
         public static final int normal=0x7f050000;
@@ -1346,6 +1347,20 @@ containing a value of this type.
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f0b008c;
+        /**  the theme applied to the application or activity 
+         */
+        public static final int CustomActionBarTheme=0x7f0b008d;
+        /**  ActionBar styles 
+         */
+        public static final int MyActionBar=0x7f0b008e;
+        /**  ActionBar tabs text styles 
+ <item name="android:textColor">@color/actionbar_text</item> 
+         */
+        public static final int MyActionBarTabText=0x7f0b0090;
+        /**  ActionBar title text 
+ <item name="android:textColor">@color/actionbar_text</item> 
+         */
+        public static final int MyActionBarTitleText=0x7f0b008f;
         /**  Mimic text appearance in select_dialog_item.xml 
          */
         public static final int TextAppearance_AppCompat_Base_CompactMenu_Dialog=0x7f0b0063;
