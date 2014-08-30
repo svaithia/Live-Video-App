@@ -16,15 +16,6 @@ public final class R {
         public static final int abc_slide_out_bottom=0x7f040004;
         public static final int abc_slide_out_top=0x7f040005;
     }
-    public static final class array {
-        /**  Nav Drawer List Item Icons 
- Keep them in order as the titles are in 
-         */
-        public static final int nav_drawer_icons=0x7f0c0001;
-        /**  Nav Drawer Menu Items 
-         */
-        public static final int nav_drawer_items=0x7f0c0000;
-    }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
@@ -1102,19 +1093,20 @@ containing a value of this type.
         public static final int abc_textfield_searchview_holo_light=0x7f020054;
         public static final int abc_textfield_searchview_right_holo_dark=0x7f020055;
         public static final int abc_textfield_searchview_right_holo_light=0x7f020056;
-        public static final int counter_bg=0x7f020057;
-        public static final int drawer_shadow=0x7f020058;
-        public static final int ic_communities=0x7f020059;
-        public static final int ic_drawer=0x7f02005a;
-        public static final int ic_home=0x7f02005b;
-        public static final int ic_launcher=0x7f02005c;
-        public static final int ic_pages=0x7f02005d;
-        public static final int ic_people=0x7f02005e;
-        public static final int ic_photos=0x7f02005f;
-        public static final int ic_whats_hot=0x7f020060;
-        public static final int list_item_bg_normal=0x7f020061;
-        public static final int list_item_bg_pressed=0x7f020062;
-        public static final int list_selector=0x7f020063;
+        public static final int action_bar_background=0x7f020057;
+        public static final int counter_bg=0x7f020058;
+        public static final int drawer_shadow=0x7f020059;
+        public static final int ic_communities=0x7f02005a;
+        public static final int ic_drawer=0x7f02005b;
+        public static final int ic_home=0x7f02005c;
+        public static final int ic_launcher=0x7f02005d;
+        public static final int ic_pages=0x7f02005e;
+        public static final int ic_people=0x7f02005f;
+        public static final int ic_photos=0x7f020060;
+        public static final int ic_whats_hot=0x7f020061;
+        public static final int list_item_bg_normal=0x7f020062;
+        public static final int list_item_bg_pressed=0x7f020063;
+        public static final int list_selector=0x7f020064;
     }
     public static final class id {
         public static final int action_bar=0x7f05001c;
@@ -1125,7 +1117,6 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f050023;
         public static final int action_bar_title=0x7f050022;
         public static final int action_context_bar=0x7f05001d;
-        public static final int action_example=0x7f050049;
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
@@ -1157,6 +1148,7 @@ containing a value of this type.
         public static final int llPlayerContainer=0x7f050046;
         public static final int llThumbnail=0x7f050042;
         public static final int lvVideos=0x7f05003e;
+        public static final int menu_item_share=0x7f050049;
         public static final int middle=0x7f050012;
         public static final int myvideoview=0x7f050047;
         public static final int never=0x7f050009;
@@ -1245,22 +1237,17 @@ containing a value of this type.
         public static final int activity_main=0x7f030018;
         public static final int drawer_list_item=0x7f030019;
         public static final int drawer_section_list_item=0x7f03001a;
-        public static final int fragment_community=0x7f03001b;
-        public static final int fragment_find_people=0x7f03001c;
-        public static final int fragment_home=0x7f03001d;
-        public static final int fragment_navigation_drawer=0x7f03001e;
-        public static final int fragment_pages=0x7f03001f;
-        public static final int fragment_photos=0x7f030020;
-        public static final int fragment_whats_hot=0x7f030021;
-        public static final int list_group=0x7f030022;
-        public static final int list_item=0x7f030023;
-        public static final int support_simple_spinner_dropdown_item=0x7f030024;
-        public static final int video_list_item=0x7f030025;
-        public static final int videoplayer=0x7f030026;
+        public static final int fragment_home=0x7f03001b;
+        public static final int list_group=0x7f03001c;
+        public static final int list_item=0x7f03001d;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001e;
+        public static final int video_list_item=0x7f03001f;
+        public static final int videoplayer=0x7f030020;
     }
     public static final class menu {
-        public static final int global=0x7f0d0000;
-        public static final int main=0x7f0d0001;
+        public static final int global=0x7f0c0000;
+        public static final int main=0x7f0c0001;
+        public static final int video_player=0x7f0c0002;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1303,22 +1290,17 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000b;
-        public static final int action_example=0x7f0a0015;
-        public static final int action_settings=0x7f0a0016;
+        public static final int action_example=0x7f0a0010;
+        public static final int action_settings=0x7f0a0011;
         public static final int app_name=0x7f0a000d;
         /**  Content Description 
          */
-        public static final int desc_list_item_icon=0x7f0a001a;
-        public static final int drawer_close=0x7f0a0019;
-        public static final int drawer_open=0x7f0a0018;
-        public static final int hello_world=0x7f0a0017;
+        public static final int desc_list_item_icon=0x7f0a0015;
+        public static final int drawer_close=0x7f0a0014;
+        public static final int drawer_open=0x7f0a0013;
+        public static final int hello_world=0x7f0a0012;
         public static final int nav_option_close=0x7f0a000f;
         public static final int nav_option_open=0x7f0a000e;
-        public static final int navigation_drawer_close=0x7f0a0014;
-        public static final int navigation_drawer_open=0x7f0a0013;
-        public static final int title_section1=0x7f0a0010;
-        public static final int title_section2=0x7f0a0011;
-        public static final int title_section3=0x7f0a0012;
     }
     public static final class style {
         /** 

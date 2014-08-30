@@ -190,13 +190,10 @@ public class MainActivity extends Activity {
         }
         // Handle action bar actions click
         switch (item.getItemId()) {
-        case R.id.action_settings:
-            return true;
         default:
             return super.onOptionsItemSelected(item);
         }
     }
- 
     /***
      * Called when invalidateOptionsMenu() is triggered
      */
@@ -204,7 +201,7 @@ public class MainActivity extends Activity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // if nav drawer is opened, hide the action items
         boolean drawerOpen = dlNavDrawer.isDrawerOpen(elvNav);
-        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+//        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
  

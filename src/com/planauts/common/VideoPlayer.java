@@ -2,20 +2,23 @@ package com.planauts.common;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.ShareActionProvider;
 import android.widget.VideoView;
 
 import com.planauts.wsj.R;
@@ -29,12 +32,12 @@ public class VideoPlayer extends Activity implements OnCompletionListener,OnPrep
     private String videoTitles[];
     
     private Handler actionBarHideHandler;
+    private ShareActionProvider mShareActionProvider;
           
     @Override
     public void onCreate(Bundle b) {
         super.onCreate(b);
         setContentView(R.layout.videoplayer);
-        
         currentPosition = 0;
             
         Bundle e = getIntent().getExtras();
@@ -44,8 +47,6 @@ public class VideoPlayer extends Activity implements OnCompletionListener,OnPrep
         vvPlayer = (VideoView)findViewById(R.id.myvideoview);
         vvPlayer.setOnCompletionListener(this);
         vvPlayer.setOnPreparedListener(this);
-        
-        getActionBar().setBackgroundDrawable(null);
         
         vidControl = new MediaController(this){
             public boolean dispatchKeyEvent(KeyEvent event){
@@ -67,10 +68,9 @@ public class VideoPlayer extends Activity implements OnCompletionListener,OnPrep
         vidControl.setAnchorView(vvPlayer);
         vvPlayer.setMediaController(vidControl);
         
+        if (!playFileRes()) return;
         
         LinearLayout llPlayerContainer = (LinearLayout)findViewById(R.id.llPlayerContainer);
-        getActionBar().hide();
-        
         llPlayerContainer.setOnTouchListener(new OnTouchListener(){
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -78,9 +78,8 @@ public class VideoPlayer extends Activity implements OnCompletionListener,OnPrep
 				return false;
 			}
         });
-//        vidControl.show();
-
-        if (!playFileRes()) return;
+        getActionBar().hide();
+        
     }
              
     private boolean playFileRes() {
@@ -163,4 +162,40 @@ public class VideoPlayer extends Activity implements OnCompletionListener,OnPrep
         	 }, 3000);
         }
     }
+	
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.video_player, menu);
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+        ShareActionProvider myShareActionProvider = (ShareActionProvider) item.getActionProvider();
+        myShareActionProvider.setShareIntent(setUpShareIntent());
+        Log.i("thiCREATE", "thisCREATE");
+
+        
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	Log.i("thi", "this");
+      switch (item.getItemId()) {
+      case R.id.menu_item_share:
+          if(actionBarHideHandler != null){
+    		 actionBarHideHandler.removeCallbacksAndMessages(null);
+          }
+        break;
+      default:
+        break;
+      }
+      return true;  
+    }
+    
+	private Intent setUpShareIntent() {
+		Intent shareIntent = new Intent(Intent.ACTION_SEND);
+    	shareIntent.setType("text/plain");
+    	shareIntent.putExtra(Intent.EXTRA_TEXT, "I just watched \"" + videoTitles[currentPosition] 
+	    			+ "\" on WSJ Live Android! It's a great video!");
+    	return shareIntent;
+	}
+	
 }
