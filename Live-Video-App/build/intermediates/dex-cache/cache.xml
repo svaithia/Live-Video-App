@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/home/eight/projects/Live-Video-App/Live-Video-App/app/build/intermediates/pre-dexed/debug/android-query-full.0.26.8-b303821e2478a0436e38b60103c9be5ce220687f.jar"
+        jar="/home/eight/projects/Live-Video-App/Live-Video-App/app/libs/android-query-full.0.26.8.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="5ab405d9f4eaf5ddd615967cd35650657b758d40"/>
+    <item
+        dex="/home/eight/projects/Live-Video-App/Live-Video-App/app/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-9376de9f974610b8e6622aedb10897ea77f84968.jar"
+        jar="/home/eight/projects/Live-Video-App/Live-Video-App/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
+    <item
+        dex="/home/eight/projects/Live-Video-App/Live-Video-App/app/build/intermediates/pre-dexed/debug/support-annotations-20.0.0-4272c3845f4e0669575104ed5087200df9d02cf8.jar"
+        jar="/home/eight/Application/android-studio/sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa"/>
+    <item
+        dex="/home/eight/projects/Live-Video-App/Live-Video-App/app/build/intermediates/pre-dexed/debug/classes-2fac507ac6c3ee6fd53408c588e0cfcf8b433fcb.jar"
+        jar="/home/eight/projects/Live-Video-App/Live-Video-App/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="f21927d22fe31889ecce94dd697a2e75b137e0ef"/>
+    <item
+        dex="/home/eight/projects/Live-Video-App/Live-Video-App/app/build/intermediates/pre-dexed/debug/classes-f3d1e4aa5870e4b60e139e7f8ecd02c961dd4f0a.jar"
+        jar="/home/eight/projects/Live-Video-App/Live-Video-App/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0"/>
+
+</pre-dex-items>
