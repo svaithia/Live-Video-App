@@ -571,6 +571,7 @@
     <string name="nav_option_open">Wall Street Journal</string>
     <string name="navigation_drawer_close">Close</string>
     <string name="navigation_drawer_open">Open</string>
+    <string name="share_default_message">I just watched "%s" on WSJ Live Android!</string>
     <string name="title_section1">Videos</string>
     <string name="title_section2">Programs</string>
     <string name="title_section3">Specials</string>
@@ -589,7 +590,7 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
-    <style name="CustomActionBarTheme" parent="@android:style/Theme.Holo">
+    <style name="CustomActionBarTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item>

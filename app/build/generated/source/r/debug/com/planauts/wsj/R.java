@@ -1095,9 +1095,10 @@ containing a value of this type.
         public static final int nav_option_open=0x7f0a0012;
         public static final int navigation_drawer_close=0x7f0a0013;
         public static final int navigation_drawer_open=0x7f0a0014;
-        public static final int title_section1=0x7f0a0015;
-        public static final int title_section2=0x7f0a0016;
-        public static final int title_section3=0x7f0a0017;
+        public static final int share_default_message=0x7f0a0015;
+        public static final int title_section1=0x7f0a0016;
+        public static final int title_section2=0x7f0a0017;
+        public static final int title_section3=0x7f0a0018;
     }
     public static final class style {
         /** 
