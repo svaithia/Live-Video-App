@@ -22,4 +22,5 @@ dependencies {
     compile "com.android.support:support-v4:20.0.+"
     compile "com.android.support:appcompat-v7:20.0.+"
     compile files('libs/android-query-full.0.26.8.jar')
+    compile files('libs/amplitude-android-1.4.1.jar')
 }

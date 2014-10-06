@@ -1,4 +1,4 @@
-package com.planauts.common;
+package activities;
 
 import android.app.ActionBar;
 import android.app.Activity;

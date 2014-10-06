@@ -50,8 +50,8 @@
 -keep class android.support.v7.widget.SearchView$SearchAutoComplete { <init>(...); }
 
 # view AndroidManifest.xml #generated:29
--keep class com.planauts.common.VideoPlayer { <init>(...); }
+-keep class activities.VideoPlayer { <init>(...); }
 
 # view AndroidManifest.xml #generated:19
--keep class com.planauts.wsj.MainActivity { <init>(...); }
+-keep class activities.MainActivity { <init>(...); }
 

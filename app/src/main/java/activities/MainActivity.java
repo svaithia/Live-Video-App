@@ -1,4 +1,4 @@
-package com.planauts.wsj;
+package activities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,14 +22,15 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.amplitude.api.Amplitude;
 import com.planauts.bean.PlaylistBean;
 import com.planauts.bean.SectionURLBean;
 import com.planauts.common.Constants;
-import com.planauts.common.VideoPlayer;
 import com.planauts.listadapters.NavDrawerListAdapter;
 import com.planauts.listadapters.VideoListAdapter;
 import com.planauts.scrapper.PlaylistURLScrapper;
 import com.planauts.scrapper.SectionURLScrapper;
+import com.planauts.wsj.R;
 
 public class MainActivity extends Activity {
     private DrawerLayout dlNavDrawer;
@@ -54,6 +55,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Amplitude.initialize(this,Constants.AMPLITUDE_API_KEY);
         setContentView(R.layout.activity_main);
 
         mTitle = mDrawerTitle = getTitle();
@@ -119,7 +121,13 @@ public class MainActivity extends Activity {
 			
 		}
     }
-    
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Amplitude.startSession();
+    }
+
     //TODO http://stackoverflow.com/questions/8315855/expandablelistview-keep-selected-child-in-a-pressed-state
     private class NavListItemClicked implements OnChildClickListener{
 		@Override
