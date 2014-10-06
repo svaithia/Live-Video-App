@@ -9,6 +9,8 @@
     <string name="title_section2">Programs</string>
     <string name="title_section3">Specials</string>
 
+    <string name="share_default_message">I just watched "%s" on WSJ Live Android!</string>
+
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
 

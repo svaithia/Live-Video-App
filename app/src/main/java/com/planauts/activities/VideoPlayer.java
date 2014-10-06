@@ -1,4 +1,4 @@
-package activities;
+package com.planauts.activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -21,6 +21,7 @@ import android.widget.MediaController;
 import android.widget.ShareActionProvider;
 import android.widget.VideoView;
 
+import com.amplitude.api.Amplitude;
 import com.planauts.wsj.R;
 
 public class VideoPlayer extends Activity implements OnCompletionListener,OnPreparedListener {
@@ -32,7 +33,6 @@ public class VideoPlayer extends Activity implements OnCompletionListener,OnPrep
     private String videoTitles[];
     
     private Handler actionBarHideHandler;
-    private ShareActionProvider mShareActionProvider;
           
     @Override
     public void onCreate(Bundle b) {
@@ -81,6 +81,11 @@ public class VideoPlayer extends Activity implements OnCompletionListener,OnPrep
         getActionBar().hide();
         
     }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+
+    }
              
     private boolean playFileRes() {
         if (fileRes==null) {
@@ -88,9 +93,10 @@ public class VideoPlayer extends Activity implements OnCompletionListener,OnPrep
             return false;
         } else {
         	String url = fileRes[currentPosition];
-        	
-        	getActionBar().setTitle(videoTitles[currentPosition]);
-        	 
+            Log.e("call", currentPosition + "");
+            getActionBar().setTitle(videoTitles[currentPosition]);
+            Log.e("call", videoTitles[currentPosition]);
+
             vvPlayer.setVideoURI(Uri.parse(url));
             vvPlayer.start();
             return true;
@@ -101,15 +107,17 @@ public class VideoPlayer extends Activity implements OnCompletionListener,OnPrep
         vvPlayer.stopPlayback();
         this.finish();
     }
- 
+
     @Override
     public void onCompletion(MediaPlayer mp) {
-    	if(++currentPosition < fileRes.length){
-        	playFileRes();
-    	}
-    	else{
-            finish();
-    	}
+        if(++currentPosition < fileRes.length) playFileRes();
+    	else finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Amplitude.startSession();
     }
     
     private class nextOnClickListener implements View.OnClickListener{
@@ -129,12 +137,7 @@ public class VideoPlayer extends Activity implements OnCompletionListener,OnPrep
 	    	playFileRes();
 		}
     }
-             
-    @Override
-    public void onPrepared(MediaPlayer mp) {
-        mp.setLooping(true);
-    }
-	
+
 	private void toggleMediaControlsVisiblity() {
         if (vidControl.isShowing()) { 
             vidControl.hide();
@@ -169,15 +172,11 @@ public class VideoPlayer extends Activity implements OnCompletionListener,OnPrep
         MenuItem item = menu.findItem(R.id.menu_item_share);
         ShareActionProvider myShareActionProvider = (ShareActionProvider) item.getActionProvider();
         myShareActionProvider.setShareIntent(setUpShareIntent());
-        Log.i("thiCREATE", "thisCREATE");
-
-        
         return true;
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	Log.i("thi", "this");
       switch (item.getItemId()) {
       case R.id.menu_item_share:
           if(actionBarHideHandler != null){
@@ -193,8 +192,7 @@ public class VideoPlayer extends Activity implements OnCompletionListener,OnPrep
 	private Intent setUpShareIntent() {
 		Intent shareIntent = new Intent(Intent.ACTION_SEND);
     	shareIntent.setType("text/plain");
-    	shareIntent.putExtra(Intent.EXTRA_TEXT, "I just watched \"" + videoTitles[currentPosition] 
-	    			+ "\" on WSJ Live Android! It's a great video!");
+    	shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_default_message, videoTitles[currentPosition]));
     	return shareIntent;
 	}
 	

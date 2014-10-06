@@ -20,6 +20,12 @@
         revision="20.0.0"
         sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
     <item
+        dex="/home/eight/projects/Live-Video-App/app/build/intermediates/pre-dexed/debug/amplitude-android-1.4.1-a85d1e449473023c7a3a3b0ed2bb307b5a96e4d3.jar"
+        jar="/home/eight/projects/Live-Video-App/app/libs/amplitude-android-1.4.1.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="bfa6ee49f7ece44d219aeaaf71dca2b95dee11e9"/>
+    <item
         dex="/home/eight/projects/Live-Video-App/app/build/intermediates/pre-dexed/debug/classes-19047f577f4c385110e9d6b3831f14dae61db5b0.jar"
         jar="/home/eight/projects/Live-Video-App/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/classes.jar"
         jumboMode="false"

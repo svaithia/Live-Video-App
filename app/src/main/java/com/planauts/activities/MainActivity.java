@@ -1,4 +1,4 @@
-package activities;
+package com.planauts.activities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
