@@ -572,6 +572,7 @@
     <string name="navigation_drawer_close">Close</string>
     <string name="navigation_drawer_open">Open</string>
     <string name="share_default_message">I just watched "%s" on WSJ Live Android!</string>
+    <string name="share_main_message">I am using WSJ Live Android! http://play.google.com/store/apps/details?id=com.planauts.wsj</string>
     <string name="title_section1">Videos</string>
     <string name="title_section2">Programs</string>
     <string name="title_section3">Specials</string>
@@ -593,7 +594,6 @@
     <style name="CustomActionBarTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item>
         <!-- <item name="android:actionMenuTextColor">@color/actionbar_text</item> -->
         <item name="android:icon">@android:color/transparent</item>
     </style>
@@ -601,14 +601,14 @@
     <style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar">
         <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
         <item name="android:background">@drawable/action_bar_background</item>
-    </style>
-
-    <style name="MyActionBarTabText" parent="@android:style/Widget.Holo.ActionBar.TabText">
-        <!-- <item name="android:textColor">@color/actionbar_text</item> -->
+        <item name="android:color">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="MyActionBarTitleText" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <!-- <item name="android:textColor">@color/actionbar_text</item> -->
+        <item name="android:background">@drawable/action_bar_background</item>
+        <item name="android:color">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
     <!-- From: file:/home/eight/projects/Live-Video-App/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/20.0.0/res/values/values.xml -->
     <eat-comment />

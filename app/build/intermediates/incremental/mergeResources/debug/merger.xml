@@ -955,16 +955,16 @@ true
                     msgid="4076576682505996667" >"Atlikta"
                 </string>
                 <string
+                    name="abc_action_bar_home_description"
+                    msgid="4600421777120114993" >"Eiti į pagrindinį puslapį"
+                </string>
+                <string
                     name="abc_searchview_description_search"
                     msgid="8264924765203268293" >"Paieška"
                 </string>
                 <string
                     name="abc_shareactionprovider_share_with_application"
                     msgid="7165123711973476752" >"Bendrinti naudojant „%s“"
-                </string>
-                <string
-                    name="abc_action_bar_home_description"
-                    msgid="4600421777120114993" >"Eiti į pagrindinį puslapį"
                 </string>
             </file>
             <file
@@ -3956,24 +3956,24 @@ false
                     msgid="3588849162933574182" >"Več možnosti"
                 </string>
                 <string
-                    name="abc_shareactionprovider_share_with"
-                    msgid="3421042268587513524" >"Deljenje z"
+                    name="abc_action_mode_done"
+                    msgid="4076576682505996667" >"Končano"
                 </string>
                 <string
                     name="abc_activity_chooser_view_see_all"
                     msgid="7468859129482906941" >"Pokaži vse"
                 </string>
                 <string
-                    name="abc_action_mode_done"
-                    msgid="4076576682505996667" >"Končano"
-                </string>
-                <string
-                    name="abc_searchview_description_submit"
-                    msgid="8928215447528550784" >"Pošiljanje poizvedbe"
+                    name="abc_shareactionprovider_share_with"
+                    msgid="3421042268587513524" >"Deljenje z"
                 </string>
                 <string
                     name="abc_searchview_description_query"
                     msgid="2550479030709304392" >"Iskalna poizvedba"
+                </string>
+                <string
+                    name="abc_searchview_description_submit"
+                    msgid="8928215447528550784" >"Pošiljanje poizvedbe"
                 </string>
                 <string
                     name="abc_searchview_description_voice"
@@ -7113,16 +7113,16 @@ false
                     msgid="2031811694353399454" >"Επιλέξτε κάποια εφαρμογή"
                 </string>
                 <string
+                    name="abc_searchview_description_clear"
+                    msgid="3691816814315814921" >"Διαγραφή ερωτήματος"
+                </string>
+                <string
                     name="abc_searchview_description_voice"
                     msgid="893419373245838918" >"Φωνητική αναζήτηση"
                 </string>
                 <string
                     name="abc_action_menu_overflow_description"
                     msgid="3588849162933574182" >"Περισσότερες επιλογές"
-                </string>
-                <string
-                    name="abc_searchview_description_clear"
-                    msgid="3691816814315814921" >"Διαγραφή ερωτήματος"
                 </string>
             </file>
             <file
@@ -8348,23 +8348,25 @@ false
             <file
                 path="/home/eight/projects/Live-Video-App/app/src/main/res/values/strings.xml"
                 qualifiers="" >
-                <string name="title_section1" >Videos
-                </string>
                 <string name="nav_option_open" >Wall Street Journal
                 </string>
-                <string name="share_default_message" >I just watched "%s" on WSJ Live Android!
-                </string>
-                <string name="title_section3" >Specials
+                <string name="title_section1" >Videos
                 </string>
                 <string name="action_settings" >Settings
                 </string>
+                <string name="title_section3" >Specials
+                </string>
+                <string name="share_default_message" >I just watched "%s" on WSJ Live Android!
+                </string>
                 <string name="title_section2" >Programs
+                </string>
+                <string name="nav_option_close" >Wall Street Journal
                 </string>
                 <string name="navigation_drawer_close" >Close
                 </string>
-                <string name="action_example" >Example action
+                <string name="share_main_message" >I am using WSJ Live Android! http://play.google.com/store/apps/details?id=com.planauts.wsj
                 </string>
-                <string name="nav_option_close" >Wall Street Journal
+                <string name="action_example" >Example action
                 </string>
                 <string name="app_name" >WSJ Live
                 </string>
@@ -8389,17 +8391,17 @@ false
                 </style>
 
                 <style
-                    name="MyActionBarTabText"
-                    parent="@android:style/Widget.Holo.ActionBar.TabText" >
-
-                    <!-- <item name="android:textColor">@color/actionbar_text</item> -->
-                </style>
-
-                <style
                     name="MyActionBarTitleText"
                     parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title" >
-
-                    <!-- <item name="android:textColor">@color/actionbar_text</item> -->
+                    <item name="android:background">
+@drawable/action_bar_background
+                    </item>
+                    <item name="android:color">
+@android:color/white
+                    </item>
+                    <item name="android:textColor">
+@android:color/white
+                    </item>
                 </style>
 
                 <style
@@ -8411,6 +8413,12 @@ false
                     <item name="android:background">
 @drawable/action_bar_background
                     </item>
+                    <item name="android:color">
+@android:color/white
+                    </item>
+                    <item name="android:textColor">
+@android:color/white
+                    </item>
                 </style>
 
                 <style
@@ -8421,9 +8429,6 @@ false
                     </item>
                     <item name="android:windowActionBarOverlay">
 true
-                    </item>
-                    <item name="android:actionBarTabTextStyle">
-@style/MyActionBarTabText
                     </item>
                     <!-- <item name="android:actionMenuTextColor">@color/actionbar_text</item> -->
                     <item name="android:icon">
@@ -8686,6 +8691,11 @@ true
                 path="/home/eight/projects/Live-Video-App/app/src/main/res/drawable-xhdpi/ic_home.png"
                 qualifiers="xhdpi-v4"
                 type="drawable" />
+            <file
+                name="settings_activity"
+                path="/home/eight/projects/Live-Video-App/app/src/main/res/layout/settings_activity.xml"
+                qualifiers=""
+                type="layout" />
         </source>
         <source path="/home/eight/projects/Live-Video-App/app/build/generated/res/rs/debug" />
         <source path="/home/eight/projects/Live-Video-App/app/build/generated/res/generated/debug" />

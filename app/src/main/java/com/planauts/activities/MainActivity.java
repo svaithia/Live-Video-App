@@ -6,7 +6,12 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.ActionProvider;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +37,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
+  private static final String TAG = MainActivity.class.getSimpleName();
   NavDrawerListAdapter navDrawerListAdapter;
   VideoListAdapter videoListAdapter;
   SectionURLScrapper sectionUrlScrapperObj;
@@ -64,18 +70,18 @@ public class MainActivity extends Activity {
     elvNav.setAdapter(navDrawerListAdapter);
 
     // enabling action bar app icon and behaving it as toggle button
-    getActionBar().setDisplayHomeAsUpEnabled(true);
-    getActionBar().setHomeButtonEnabled(true);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    getSupportActionBar().setHomeButtonEnabled(true);
 
     mDrawerToggle = new ActionBarDrawerToggle(this, dlNavDrawer,
       R.drawable.ic_drawer, R.string.nav_option_open, R.string.nav_option_close) {
       public void onDrawerClosed(View view) {
-        getActionBar().setTitle(mTitle);
+        getSupportActionBar().setTitle(mTitle);
         invalidateOptionsMenu();
       }
 
       public void onDrawerOpened(View drawerView) {
-        getActionBar().setTitle(mDrawerTitle);
+        getSupportActionBar().setTitle(mDrawerTitle);
         invalidateOptionsMenu();
       }
     };
@@ -121,25 +127,6 @@ public class MainActivity extends Activity {
     }
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.main, menu);
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // toggle nav drawer on selecting action bar app icon/title
-    if (mDrawerToggle.onOptionsItemSelected(item)) {
-      return true;
-    }
-    // Handle action bar actions click
-    switch (item.getItemId()) {
-      default:
-        return super.onOptionsItemSelected(item);
-    }
-  }
-
   /**
    * Called when invalidateOptionsMenu() is triggered
    */
@@ -154,7 +141,7 @@ public class MainActivity extends Activity {
   @Override
   public void setTitle(CharSequence title) {
     mTitle = title;
-    getActionBar().setTitle(mTitle);
+    getSupportActionBar().setTitle(mTitle);
   }
 
   /**
@@ -174,52 +161,6 @@ public class MainActivity extends Activity {
     super.onConfigurationChanged(newConfig);
     // Pass any configuration change to the drawer toggls
     mDrawerToggle.onConfigurationChanged(newConfig);
-  }
-
-  /**
-   * Diplaying fragment view for selected nav drawer list item
-   */
-  private void displayView(int position) {
-    // update the main content by replacing fragments
-    Fragment fragment = null;
-    switch (position) {
-      case 0:
-//            fragment = new HomeFragment();
-        break;
-      case 1:
-//            fragment = new FindPeopleFragment();
-        break;
-      case 2:
-//            fragment = new PhotosFragment();
-        break;
-      case 3:
-//            fragment = new CommunityFragment();
-        break;
-      case 4:
-//            fragment = new PagesFragment();
-        break;
-      case 5:
-//            fragment = new WhatsHotFragment();
-        break;
-
-      default:
-        break;
-    }
-
-//        if (fragment != null) {
-//            FragmentManager fragmentManager = getFragmentManager();
-//            fragmentManager.beginTransaction()
-//                    .replace(R.id.frame_container, fragment).commit();
-//
-//            // update selected item and title, then close the drawer
-//            mDrawerList.setItemChecked(position, true);
-//            mDrawerList.setSelection(position);
-//            setTitle(navMenuTitles[position]);
-//            dlNavDrawer.closeDrawer(mDrawerList);
-//        } else {
-//            // error in creating fragment
-//            Log.e("MainActivity", "Error in creating fragment");
-//        }
   }
 
   private void prepareListData() {
@@ -261,7 +202,6 @@ public class MainActivity extends Activity {
       videoPlaybackActivity.putExtra("videoPlaylistTitltes", resourceTitles);
       startActivity(videoPlaybackActivity);
 
-
     }
   }
 
@@ -296,6 +236,43 @@ public class MainActivity extends Activity {
 
       return false;
     }
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.main, menu);
+    MenuItem item = menu.findItem(R.id.menu_item_share);
+    ShareActionProvider myShareActionProvider = new ShareActionProvider(this);
+    MenuItemCompat.setActionProvider(item, myShareActionProvider);
+
+    if(myShareActionProvider != null){
+      myShareActionProvider.setShareIntent(setUpShareIntent());
+    }
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    // toggle nav drawer on selecting action bar app icon/title
+    if (mDrawerToggle.onOptionsItemSelected(item)) {
+      return true;
+    }
+    // Handle action bar actions click
+    switch (item.getItemId()) {
+      case R.id.menu_item_settings:{
+
+      }
+      default:{
+        return super.onOptionsItemSelected(item);
+      }
+    }
+  }
+
+  private Intent setUpShareIntent() {
+    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+    shareIntent.setType("text/plain");
+    shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_main_message));
+    return shareIntent;
   }
 
 

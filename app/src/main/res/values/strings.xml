@@ -9,11 +9,11 @@
     <string name="title_section2">Programs</string>
     <string name="title_section3">Specials</string>
 
-    <string name="share_default_message">I just watched "%s" on WSJ Live Android!</string>
+  <string name="share_default_message">I just watched "%s" on WSJ Live Android!</string>
+  <string name="share_main_message">I am using WSJ Live Android! http://play.google.com/store/apps/details?id=com.planauts.wsj</string>
 
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
-
 
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>

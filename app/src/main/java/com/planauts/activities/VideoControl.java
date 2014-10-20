@@ -1,6 +1,7 @@
 package com.planauts.activities;
 
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
 import android.widget.MediaController;
 
 /**
@@ -8,6 +9,8 @@ import android.widget.MediaController;
  */
 public class VideoControl extends MediaController {
   private ActionBarActivity activity;
+  public boolean menu_open;
+
   public VideoControl(ActionBarActivity activity) {
     super(activity);
     this.activity = activity;
@@ -16,7 +19,9 @@ public class VideoControl extends MediaController {
   @Override
   public void hide() {
     super.hide();
-    activity.getSupportActionBar().hide();
+    if(!menu_open) {
+      activity.getSupportActionBar().hide();
+    }
   }
 
   @Override
@@ -24,26 +29,4 @@ public class VideoControl extends MediaController {
     super.show();
     activity.getSupportActionBar().show();
   }
-
-
-//  private void toggleActionBarVisiblity() {
-//    if (getActionBar().isShowing() || vidControl.isShowing()) {
-//      Log.e("T", getActionBar().isShowing() + " " + vidControl.isShowing());
-//      getActionBar().hide();
-//      if (actionBarHideHandler != null) {
-//        actionBarHideHandler.removeCallbacksAndMessages(null);
-//      }
-//    }
-//    else {
-//      getActionBar().show();
-//      actionBarHideHandler = new Handler();
-//      actionBarHideHandler.postDelayed(new Runnable() {
-//        @Override
-//        public void run() {
-//          getActionBar().hide();
-//        }
-//      }, 3000);
-//    }
-//  }
-
 }

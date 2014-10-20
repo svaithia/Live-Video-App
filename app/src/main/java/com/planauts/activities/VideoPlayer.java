@@ -7,9 +7,11 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.ActionProvider;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,8 +20,9 @@ import android.widget.VideoView;
 import com.amplitude.api.Amplitude;
 import com.planauts.wsj.R;
 
-public class VideoPlayer extends ActionBarActivity implements OnCompletionListener, OnPreparedListener {
+public class VideoPlayer extends ActionBarActivity implements OnCompletionListener, OnPreparedListener, MediaPlayer.OnErrorListener {
 
+  private static final String TAG = VideoPlayer.class.getSimpleName();
   private VideoView vvPlayer;
   private VideoControl vidControl;
   private int currentPosition = 0;
@@ -47,6 +50,7 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
     vvPlayer.setMediaController(vidControl);
     vvPlayer.requestFocus();
     vidControl.requestFocus();
+    vvPlayer.setOnErrorListener(this);
 
     if (!playFileRes()) return;
 //
@@ -71,8 +75,6 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
     }
   }
 
-
-
   @Override
   public void onPrepared(MediaPlayer mp) {
     vidControl.show();
@@ -80,22 +82,19 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
 
   private boolean playFileRes() {
     if (fileRes == null) {
-      stopPlaying();
+      vvPlayer.stopPlayback();
+      finish();
       return false;
     }
     else {
       String url = fileRes[currentPosition];
       getSupportActionBar().setTitle(videoTitles[currentPosition]);
 
+      vvPlayer.stopPlayback();
       vvPlayer.setVideoURI(Uri.parse(url));
       vvPlayer.start();
       return true;
     }
-  }
-
-  public void stopPlaying() {
-    vvPlayer.stopPlayback();
-    this.finish();
   }
 
   @Override
@@ -111,25 +110,29 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
   }
 
   @Override
+  public void onOptionsMenuClosed(Menu menu) {
+    super.onOptionsMenuClosed(menu);
+    vidControl.menu_open = false;
+  }
+
+  @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.video_player, menu);
     MenuItem item = menu.findItem(R.id.menu_item_share);
     ShareActionProvider myShareActionProvider = new ShareActionProvider(this);
     MenuItemCompat.setActionProvider(item, myShareActionProvider);
 
-    if(myShareActionProvider != null)
+    if(myShareActionProvider != null){
       myShareActionProvider.setShareIntent(setUpShareIntent());
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.menu_item_share:
-        if (actionBarHideHandler != null) {
-          actionBarHideHandler.removeCallbacksAndMessages(null);
+      myShareActionProvider.setSubUiVisibilityListener(new ActionProvider.SubUiVisibilityListener() {
+        @Override
+        public void onSubUiVisibilityChanged(boolean b) {
+          vidControl.menu_open = b;
+          if(!b){
+            vidControl.show();
+          }
         }
-        break;
+      });
     }
     return true;
   }
@@ -139,6 +142,13 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
     shareIntent.setType("text/plain");
     shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_default_message, videoTitles[currentPosition]));
     return shareIntent;
+  }
+
+  @Override
+  public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
+    Log.e(TAG, "onError MediaPlayer");
+    Amplitude.logEvent("onError MediaPlayer");
+    return false;
   }
 
   private class nextOnClickListener implements View.OnClickListener {
