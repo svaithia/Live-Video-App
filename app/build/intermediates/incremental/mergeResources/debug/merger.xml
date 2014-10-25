@@ -955,16 +955,16 @@ true
                     msgid="4076576682505996667" >"Atlikta"
                 </string>
                 <string
-                    name="abc_action_bar_home_description"
-                    msgid="4600421777120114993" >"Eiti į pagrindinį puslapį"
-                </string>
-                <string
                     name="abc_searchview_description_search"
                     msgid="8264924765203268293" >"Paieška"
                 </string>
                 <string
                     name="abc_shareactionprovider_share_with_application"
                     msgid="7165123711973476752" >"Bendrinti naudojant „%s“"
+                </string>
+                <string
+                    name="abc_action_bar_home_description"
+                    msgid="4600421777120114993" >"Eiti į pagrindinį puslapį"
                 </string>
             </file>
             <file
@@ -7113,16 +7113,16 @@ false
                     msgid="2031811694353399454" >"Επιλέξτε κάποια εφαρμογή"
                 </string>
                 <string
-                    name="abc_searchview_description_clear"
-                    msgid="3691816814315814921" >"Διαγραφή ερωτήματος"
-                </string>
-                <string
                     name="abc_searchview_description_voice"
                     msgid="893419373245838918" >"Φωνητική αναζήτηση"
                 </string>
                 <string
                     name="abc_action_menu_overflow_description"
                     msgid="3588849162933574182" >"Περισσότερες επιλογές"
+                </string>
+                <string
+                    name="abc_searchview_description_clear"
+                    msgid="3691816814315814921" >"Διαγραφή ερωτήματος"
                 </string>
             </file>
             <file
@@ -8694,6 +8694,41 @@ true
             <file
                 name="settings_activity"
                 path="/home/eight/projects/Live-Video-App/app/src/main/res/layout/settings_activity.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_spotlight"
+                path="/home/eight/projects/Live-Video-App/app/src/main/res/layout/fragment_spotlight.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="fragment_browse"
+                path="/home/eight/projects/Live-Video-App/app/src/main/res/layout/fragment_browse.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="activity_main1"
+                path="/home/eight/projects/Live-Video-App/app/src/main/res/layout/activity_main1.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="spinner_settings"
+                path="/home/eight/projects/Live-Video-App/app/src/main/res/layout/spinner_settings.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="snippet_item2"
+                path="/home/eight/projects/Live-Video-App/app/src/main/res/layout/snippet_item2.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="snippet_item1"
+                path="/home/eight/projects/Live-Video-App/app/src/main/res/layout/snippet_item1.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="activity_playlist"
+                path="/home/eight/projects/Live-Video-App/app/src/main/res/layout/activity_playlist.xml"
                 qualifiers=""
                 type="layout" />
         </source>

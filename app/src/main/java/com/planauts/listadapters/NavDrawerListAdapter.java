@@ -12,7 +12,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.planauts.wsj.R;
- 
+
 public class NavDrawerListAdapter extends BaseExpandableListAdapter {
 
 	private Context _context;

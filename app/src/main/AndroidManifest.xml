@@ -5,7 +5,8 @@
     android:versionName="1.0" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -13,7 +14,7 @@
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
 
         <activity
-            android:name="com.planauts.activities.MainActivity"
+            android:name="com.planauts.activities.MainAct"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,8 +33,12 @@
       <activity
         android:name="com.planauts.activities.SettingsActivity"
         android:label="@string/app_name"></activity>
-        
-        
+      <activity
+        android:name="com.planauts.activities.MainActivity"
+        android:label="@string/app_name"></activity>
+      <activity
+        android:name="com.planauts.activities.PlaylistActivity"
+        android:label="@string/app_name"></activity>
     </application>
 
 </manifest>

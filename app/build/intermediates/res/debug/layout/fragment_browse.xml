@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+  <ListView
+    android:id="@+id/lvSectionList"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:choiceMode="singleChoice"
+    android:divider="@color/list_divider"
+    android:dividerHeight="1dp"
+    android:listSelector="@drawable/list_selector"
+    android:background="@color/list_background"/>
+</LinearLayout><!-- From: file:/home/eight/projects/Live-Video-App/app/src/main/res/layout/fragment_browse.xml -->

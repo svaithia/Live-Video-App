@@ -1,17 +1,19 @@
 package com.planauts.activities;
 
-import android.app.Activity;
-import android.app.Fragment;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.ActionProvider;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +34,7 @@ import com.planauts.scrapper.PlaylistURLScrapper;
 import com.planauts.scrapper.SectionURLScrapper;
 import com.planauts.wsj.R;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -42,8 +45,8 @@ public class MainActivity extends ActionBarActivity {
   NavDrawerListAdapter navDrawerListAdapter;
   VideoListAdapter videoListAdapter;
   SectionURLScrapper sectionUrlScrapperObj;
-  List<String> listDataHeader;
-  HashMap<String, List<String>> listDataChild;
+  List<String> listDataHeader; //
+  HashMap<String, List<String>> listDataChild; //
   private DrawerLayout dlNavDrawer;
   private ExpandableListView elvNav;
   private ListView lvVideos;
@@ -65,9 +68,7 @@ public class MainActivity extends ActionBarActivity {
     elvNav = (ExpandableListView) findViewById(R.id.elvSliderMenu);
     lvVideos = (ListView) findViewById(R.id.lvVideos);
 
-    prepareListData();
-    navDrawerListAdapter = new NavDrawerListAdapter(this, listDataHeader, listDataChild);
-    elvNav.setAdapter(navDrawerListAdapter);
+
 
     // enabling action bar app icon and behaving it as toggle button
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -92,21 +93,62 @@ public class MainActivity extends ActionBarActivity {
     }
 
     elvNav.setOnChildClickListener(new NavListItemClicked());
-//        elvNav.setOnGroupExpandListener(new NavListGroupExpand());
-//        elvNav.setOnGroupCollapseListener(new NavListGroupCollapse());
 
     lvVideos.setOnItemClickListener(new VideoListListener());
 
+  }
+
+  private void setUp(){
+    prepareListData();
+    navDrawerListAdapter = new NavDrawerListAdapter(this, listDataHeader, listDataChild);
+    elvNav.setAdapter(navDrawerListAdapter);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
     Amplitude.startSession();
+
+    if(!isNetworkAvailable()) {
+      new AlertDialog.Builder(this)
+        .setTitle("No Internet Connection")
+        .setMessage("You don't have internet connection. Enable internet and restart this application.")
+        .setCancelable(false)
+        .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            return;
+          }
+        }).create().show();
+    }
+    else {
+      SharedPreferences myPrefs = this.getSharedPreferences("preference", MODE_PRIVATE);
+      boolean wifi_only = myPrefs.getBoolean("wifi", false);
+
+      if (wifi_only && isDataEnabled()){
+        new AlertDialog.Builder(this)
+          .setTitle("Data Enabled")
+          .setMessage("You have data enabled but you said you don't want to use data. Please disable data before using this application.")
+          .setCancelable(false)
+          .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              return;
+            }
+          }).create().show();
+      }
+      else {
+        int quality = myPrefs.getInt("quality", 1);
+        VIDEO_QUALITY = Constants.VIDEO_RESOLUTION_ID[quality];
+        setUp();
+      }
+    }
   }
 
+  private int VIDEO_QUALITY = 360;
+
   private void loadVideosFromUrl(String url) {
-    PlaylistURLScrapper playlistUrlScrapperObj = new PlaylistURLScrapper(url, 360);
+    PlaylistURLScrapper playlistUrlScrapperObj = new PlaylistURLScrapper(url, VIDEO_QUALITY);
     playlistUrlScrapperObj.fetchXML();
     while (!playlistUrlScrapperObj.parsingComplete()) ;
     List<PlaylistBean> playList = playlistUrlScrapperObj.playlistUrlBeans();
@@ -162,6 +204,8 @@ public class MainActivity extends ActionBarActivity {
     // Pass any configuration change to the drawer toggls
     mDrawerToggle.onConfigurationChanged(newConfig);
   }
+
+
 
   private void prepareListData() {
     sectionUrlScrapperObj = new SectionURLScrapper();
@@ -251,6 +295,29 @@ public class MainActivity extends ActionBarActivity {
     return true;
   }
 
+  private boolean isNetworkAvailable() {
+    ConnectivityManager connectivityManager
+      = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+  }
+
+  private boolean isDataEnabled(){
+    boolean mobileDataEnabled = false; // Assume disabled
+    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    try {
+      Class cmClass = Class.forName(cm.getClass().getName());
+      Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
+      method.setAccessible(true); // Make the method callable
+      // get the setting for "mobile data"
+      mobileDataEnabled = (Boolean)method.invoke(cm);
+    } catch (Exception e) {
+      // Some problem accessible private API
+      // TODO do whatever error handling you want here
+    }
+    return mobileDataEnabled;
+  }
+
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     // toggle nav drawer on selecting action bar app icon/title
@@ -260,7 +327,8 @@ public class MainActivity extends ActionBarActivity {
     // Handle action bar actions click
     switch (item.getItemId()) {
       case R.id.menu_item_settings:{
-
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
       }
       default:{
         return super.onOptionsItemSelected(item);
