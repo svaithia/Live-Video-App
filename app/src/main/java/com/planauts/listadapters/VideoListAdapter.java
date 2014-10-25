@@ -1,27 +1,24 @@
 package com.planauts.listadapters;
 
-import java.io.InputStream;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidquery.AQuery;
+import com.planauts.activities.VideoPlayer;
 import com.planauts.bean.PlaylistBean;
 import com.planauts.wsj.R;
 
-public class VideoListAdapter extends BaseAdapter {
+import java.util.List;
+
+public class VideoListAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 	private Context _context;
 	private List<PlaylistBean> _listPlaylist;
 	
@@ -58,16 +55,25 @@ public class VideoListAdapter extends BaseAdapter {
 		TextView tvDuration = (TextView) convertView.findViewById(R.id.tvDuration);
 		
 		PlaylistBean item = getItem(position);
-		tvTitle.setText(item.title());
-		tvPubDate.setText(item.pubDate());
+		tvTitle.setText(item.title);
+		tvPubDate.setText(item.pubDate);
 		
 		AQuery aq = new AQuery(ivThumbnail);
-		aq.id(R.id.ivThumbnail).image(item.image());
+		aq.id(R.id.ivThumbnail).image(item.image);
 		
 		tvDuration.setText(item.durationFormatted());
 		
 		return convertView;
 	}
-	
+
+  @Override
+  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    PlaylistBean item = _listPlaylist.get(position);
+
+    Intent videoPlaybackActivity = new Intent(_context, VideoPlayer.class);
+    videoPlaybackActivity.putExtra("videoPlaylistUrls", item.url);
+    videoPlaybackActivity.putExtra("videoPlaylistTitltes", item.title);
+    _context.startActivity(videoPlaybackActivity);
+  }
 
 }

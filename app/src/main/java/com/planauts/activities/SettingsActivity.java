@@ -25,6 +25,8 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
   private Button bSaveSettings;
 
   public static final String SETTINGS = "SETTINGS";
+  public static final String QUALITY = "quality";
+  public static final String WIFI_ONLY = "wifi";
 
   private SharedPreferences sharedpreferences;
 
@@ -48,8 +50,8 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
 
     sharedpreferences = getSharedPreferences(SETTINGS, Context.MODE_PRIVATE);
 
-    sQuality.setSelection(sharedpreferences.getInt("quality", 1));
-    tbWifiSettings.setChecked(sharedpreferences.getBoolean("wifi", false));
+    sQuality.setSelection(sharedpreferences.getInt(QUALITY, 1));
+    tbWifiSettings.setChecked(sharedpreferences.getBoolean(WIFI_ONLY, false));
   }
 
 
@@ -57,8 +59,8 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
   public void onClick(View view) {
     switch(view.getId()){
       case R.id.bSaveSettings:{
-        sharedpreferences.edit().putBoolean("wifi", tbWifiSettings.isChecked()).apply();
-        sharedpreferences.edit().putInt("quality", sQuality.getSelectedItemPosition()).apply();
+        sharedpreferences.edit().putBoolean(WIFI_ONLY, tbWifiSettings.isChecked()).apply();
+        sharedpreferences.edit().putInt(QUALITY, sQuality.getSelectedItemPosition()).apply();
         finish();
         break;
       }

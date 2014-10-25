@@ -1,10 +1,8 @@
 package com.planauts.scrapper;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.planauts.bean.SectionBean;
-import com.planauts.bean.SectionURLBean;
 import com.planauts.common.Constants;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -20,7 +18,7 @@ import java.util.List;
 
 public class SectionScrapper extends AsyncTask<Void, Void, HashMap<String, List<SectionBean>>> {
   Callback callback;
-  private String TAG = SectionScrapper.class.getSimpleName();
+  public static final String TAG = SectionScrapper.class.getSimpleName();
 
   public SectionScrapper(Callback callback){
     this.callback = callback;

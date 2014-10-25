@@ -237,15 +237,14 @@ public class MainActivity extends ActionBarActivity {
 
       for (int i = 0; i < arrSize; i++) {
         PlaylistBean itemClicked = videoListAdapter.getItem(i + position);
-        resourceUrls[i] = itemClicked.url();
-        resourceTitles[i] = itemClicked.title();
+        resourceUrls[i] = itemClicked.url;
+        resourceTitles[i] = itemClicked.title;
       }
 
       Intent videoPlaybackActivity = new Intent(getApplicationContext(), VideoPlayer.class);
       videoPlaybackActivity.putExtra("videoPlaylistUrls", resourceUrls);
       videoPlaybackActivity.putExtra("videoPlaylistTitltes", resourceTitles);
       startActivity(videoPlaybackActivity);
-
     }
   }
 
