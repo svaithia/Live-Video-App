@@ -16,14 +16,15 @@ import com.planauts.activities.VideoPlayer;
 import com.planauts.bean.PlaylistBean;
 import com.planauts.wsj.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VideoListAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
-	private Context _context;
+	private Context mContext;
 	private List<PlaylistBean> _listPlaylist;
 	
 	public VideoListAdapter(Context context, List<PlaylistBean> playList) {
-		this._context = context;
+		this.mContext = context;
 		this._listPlaylist = playList;
 	}
 	
@@ -45,7 +46,7 @@ public class VideoListAdapter extends BaseAdapter implements AdapterView.OnItemC
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if(convertView==null){
-			LayoutInflater layoutInflator = (LayoutInflater) _context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater layoutInflator = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 			convertView = layoutInflator.inflate(R.layout.video_list_item, null);
 		}
 
@@ -56,24 +57,27 @@ public class VideoListAdapter extends BaseAdapter implements AdapterView.OnItemC
 		
 		PlaylistBean item = getItem(position);
 		tvTitle.setText(item.title);
-		tvPubDate.setText(item.pubDate);
-		
-		AQuery aq = new AQuery(ivThumbnail);
+		tvPubDate.setText(item.pubDateFormatted());
+    tvDuration.setText(item.durationFormatted());
+
+    AQuery aq = new AQuery(ivThumbnail);
 		aq.id(R.id.ivThumbnail).image(item.image);
 		
-		tvDuration.setText(item.durationFormatted());
-		
+
 		return convertView;
 	}
 
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    PlaylistBean item = _listPlaylist.get(position);
+    ArrayList<PlaylistBean> playlistBeanArrayList = new ArrayList<PlaylistBean>();
+    for(int i = position, end = position+_listPlaylist.size(); i<end; i++){
+      PlaylistBean entry = _listPlaylist.get(i % (_listPlaylist.size()));
+      playlistBeanArrayList.add(entry);
+    }
 
-    Intent videoPlaybackActivity = new Intent(_context, VideoPlayer.class);
-    videoPlaybackActivity.putExtra("videoPlaylistUrls", item.url);
-    videoPlaybackActivity.putExtra("videoPlaylistTitltes", item.title);
-    _context.startActivity(videoPlaybackActivity);
+    Intent videoPlaybackActivity = new Intent(mContext, VideoPlayer.class);
+    videoPlaybackActivity.putParcelableArrayListExtra(VideoPlayer.INTENT_VIDEOS, playlistBeanArrayList);
+    mContext.startActivity(videoPlaybackActivity);
   }
 
 }

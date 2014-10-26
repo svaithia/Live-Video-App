@@ -1,12 +1,10 @@
 package com.planauts.activities;
 
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.view.ActionProvider;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -18,17 +16,21 @@ import android.view.View;
 import android.widget.VideoView;
 
 import com.amplitude.api.Amplitude;
+import com.planauts.bean.PlaylistBean;
+import com.planauts.common.Constants;
 import com.planauts.wsj.R;
 
+import java.util.List;
+
 public class VideoPlayer extends ActionBarActivity implements OnCompletionListener, OnPreparedListener, MediaPlayer.OnErrorListener {
+
+  public static final String INTENT_VIDEOS = "VIDEOS";
 
   private static final String TAG = VideoPlayer.class.getSimpleName();
   private VideoView vvPlayer;
   private VideoControl vidControl;
   private int currentPosition = 0;
-  private String fileRes[];
-  private String videoTitles[];
-  private Handler actionBarHideHandler;
+  private PlaylistBean[] playlistArray;
 
   @Override
   public void onCreate(Bundle b) {
@@ -38,8 +40,8 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
 
     Bundle e = getIntent().getExtras();
     if(e != null){
-      fileRes = e.getStringArray("videoPlaylistUrls");
-      videoTitles = e.getStringArray("videoPlaylistTitltes");
+      List<PlaylistBean> playlistArr = e.getParcelableArrayList(INTENT_VIDEOS);
+      playlistArray = playlistArr.toArray(new PlaylistBean[playlistArr.size()]);
     }
 
     vvPlayer.setOnCompletionListener(this);
@@ -53,16 +55,7 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
     vvPlayer.setOnErrorListener(this);
 
     if (!playFileRes()) return;
-//
-//    LinearLayout llPlayerContainer = (LinearLayout) findViewById(R.id.llPlayerContainer);
-//    llPlayerContainer.setOnTouchListener(new OnTouchListener() {
-//      @Override
-//      public boolean onTouch(View v, MotionEvent event) {
-//        toggleActionBarVisiblity();
-//        Log.e("WTFF", "WTFF");
-//        return true;
-//      }
-//    });
+
   }
 
   @Override
@@ -81,14 +74,15 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
   }
 
   private boolean playFileRes() {
-    if (fileRes == null) {
+    if (playlistArray == null) {
       vvPlayer.stopPlayback();
       finish();
       return false;
     }
     else {
-      String url = fileRes[currentPosition];
-      getSupportActionBar().setTitle(videoTitles[currentPosition]);
+      PlaylistBean item = playlistArray[currentPosition];
+      String url = item.url;
+      getSupportActionBar().setTitle(item.title);
 
       vvPlayer.stopPlayback();
       vvPlayer.setVideoURI(Uri.parse(url));
@@ -99,7 +93,7 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
 
   @Override
   public void onCompletion(MediaPlayer mp) {
-    if (++currentPosition < fileRes.length) playFileRes();
+    if (++currentPosition < playlistArray.length) playFileRes();
     else finish();
   }
 
@@ -123,7 +117,8 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
     MenuItemCompat.setActionProvider(item, myShareActionProvider);
 
     if(myShareActionProvider != null){
-      myShareActionProvider.setShareIntent(setUpShareIntent());
+      String currentTitle = playlistArray[currentPosition].title;
+      myShareActionProvider.setShareIntent(Constants.setUpShareIntent(getString(R.string.share_default_message, currentTitle)));
       myShareActionProvider.setSubUiVisibilityListener(new ActionProvider.SubUiVisibilityListener() {
         @Override
         public void onSubUiVisibilityChanged(boolean b) {
@@ -137,13 +132,6 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
     return true;
   }
 
-  private Intent setUpShareIntent() {
-    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-    shareIntent.setType("text/plain");
-    shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_default_message, videoTitles[currentPosition]));
-    return shareIntent;
-  }
-
   @Override
   public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
     Log.e(TAG, "onError MediaPlayer");
@@ -155,7 +143,7 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
     @Override
     public void onClick(View v) {
       vvPlayer.stopPlayback();
-      currentPosition = (currentPosition + 1) % (fileRes.length);
+      currentPosition = (currentPosition + 1) % (playlistArray.length);
       playFileRes();
     }
   }
@@ -164,7 +152,7 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
     @Override
     public void onClick(View v) {
       vvPlayer.stopPlayback();
-      currentPosition = (currentPosition - 1) % (fileRes.length);
+      currentPosition = (currentPosition - 1) % (playlistArray.length);
       playFileRes();
     }
   }

@@ -4,8 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.planauts.bean.PlaylistBean;
 import com.planauts.bean.SectionBean;
@@ -22,6 +23,7 @@ import java.util.List;
 public class PlaylistActivity extends ActionBarActivity implements PlaylistScrapper.Callback{
   public static final String TAG = PlaylistActivity.class.getSimpleName();
   private ListView lvVideos;
+  private ProgressBar progressbar;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +31,12 @@ public class PlaylistActivity extends ActionBarActivity implements PlaylistScrap
     setContentView(R.layout.activity_playlist);
 
     lvVideos = (ListView) findViewById(R.id.lvVideos);
+    progressbar = (ProgressBar) findViewById(R.id.progressbar);
 
     Bundle bundle = getIntent().getExtras();
     SectionBean sectionBean = bundle.getParcelable("selected");
+
+    getSupportActionBar().setTitle(sectionBean.name);
 
     SharedPreferences sharedpreferences =
       getSharedPreferences(SettingsActivity.SETTINGS, Context.MODE_PRIVATE);
@@ -45,7 +50,8 @@ public class PlaylistActivity extends ActionBarActivity implements PlaylistScrap
 
   @Override
   public void success(List<PlaylistBean> playlistBeans) {
-    VideoListAdapter videoListAdapter = new VideoListAdapter(getApplicationContext(), playlistBeans);
+    progressbar.setVisibility(View.GONE);
+    VideoListAdapter videoListAdapter = new VideoListAdapter(this, playlistBeans);
     lvVideos.setAdapter(videoListAdapter);
     lvVideos.setOnItemClickListener(videoListAdapter);
   }

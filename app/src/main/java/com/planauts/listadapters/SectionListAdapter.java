@@ -81,7 +81,7 @@ public class SectionListAdapter extends BaseAdapter implements AdapterView.OnIte
   }
 
   public View getView(int position, View convertView, ViewGroup parent) {
-    ViewHolder holder = null;
+    ViewHolder holder;
     int rowType = getItemViewType(position);
 
     if (convertView == null) {

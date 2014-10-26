@@ -152,7 +152,7 @@ public class MainActivity extends ActionBarActivity {
     playlistUrlScrapperObj.fetchXML();
     while (!playlistUrlScrapperObj.parsingComplete()) ;
     List<PlaylistBean> playList = playlistUrlScrapperObj.playlistUrlBeans();
-    videoListAdapter = new VideoListAdapter(getApplicationContext(), playList);
+    videoListAdapter = new VideoListAdapter(this, playList);
     lvVideos.setAdapter(videoListAdapter);
   }
 

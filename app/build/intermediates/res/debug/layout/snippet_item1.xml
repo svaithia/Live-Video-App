@@ -8,10 +8,10 @@
     android:id="@+id/text"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#FFF"
+    android:background="#2F2F2F"
     android:gravity="center_vertical"
     android:padding="5dp"
     android:textAppearance="?android:attr/textAppearanceLarge"
-    android:textColor="#FF000000" />
+    android:textColor="#FFF" />
 
 </LinearLayout><!-- From: file:/home/eight/projects/Live-Video-App/app/src/main/res/layout/snippet_item1.xml -->

@@ -6,12 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.planauts.bean.SectionBean;
-import com.planauts.listadapters.NavDrawerListAdapter;
 import com.planauts.listadapters.SectionListAdapter;
 import com.planauts.scrapper.SectionScrapper;
 import com.planauts.wsj.R;
@@ -24,12 +22,13 @@ import java.util.List;
  */
 public class BrowseFragment extends Fragment implements SectionScrapper.Callback{
   private ListView lvSectionList;
+  private ProgressBar progressbar;
 
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_browse, container, false);
     lvSectionList = (ListView) view.findViewById(R.id.lvSectionList);
-
+    progressbar = (ProgressBar) view.findViewById(R.id.progressbar);
     return view;
   }
 
@@ -49,6 +48,7 @@ public class BrowseFragment extends Fragment implements SectionScrapper.Callback
 
   @Override
   public void success(HashMap<String, List<SectionBean>> sectionURLBean) {
+    progressbar.setVisibility(View.GONE);
     SectionListAdapter sectionListAdapter = new SectionListAdapter(getActivity());
     sectionListAdapter.addMap(sectionURLBean);
     lvSectionList.setAdapter(sectionListAdapter);
