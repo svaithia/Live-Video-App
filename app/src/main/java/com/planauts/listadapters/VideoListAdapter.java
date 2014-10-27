@@ -71,7 +71,7 @@ public class VideoListAdapter extends BaseAdapter implements AdapterView.OnItemC
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     ArrayList<PlaylistBean> playlistBeanArrayList = new ArrayList<PlaylistBean>();
     for(int i = position, end = position+_listPlaylist.size(); i<end; i++){
-      PlaylistBean entry = _listPlaylist.get(i % (_listPlaylist.size()));
+      PlaylistBean entry = getItem(i % (getCount()));
       playlistBeanArrayList.add(entry);
     }
 

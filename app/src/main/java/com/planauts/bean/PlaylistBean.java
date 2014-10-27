@@ -8,6 +8,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.sql.Time;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,20 +53,18 @@ public class PlaylistBean implements Parcelable {
 	}
 
   public String pubDateFormatted(){
-//    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-//    long timestamp = Time.valueOf(pubDate).getTime();
-//
-//    Calendar cal = Calendar.getInstance();
-//    TimeZone tz = cal.getTimeZone();
-//    CharSequence relTime = DateUtils.getRelativeTimeSpanString(
-//      timestamp * 1000,
-//      System.currentTimeMillis(),
-//      DateUtils.MINUTE_IN_MILLIS);
-//
-//    Log.e(TAG, relTime.toString());
-//
-//    return relTime.toString();
+    String formattedDate = pubDate;
+    try {
+      SimpleDateFormat originalFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z");
+      originalFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+      Date dateStr = originalFormat.parse(pubDate);
+      originalFormat.setTimeZone(TimeZone.getDefault());
+      formattedDate = originalFormat.format(dateStr);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
 
+    return formattedDate;
   }
 	
 	public String toString(){

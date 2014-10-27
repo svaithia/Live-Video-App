@@ -17,8 +17,8 @@
         
     <ImageView
         android:id="@+id/ivThumbnail"
-	         android:layout_width="fill_parent"
-	         android:layout_height="fill_parent"
+	      android:layout_width="fill_parent"
+	      android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_launcher" />
     
@@ -31,31 +31,31 @@
         android:gravity="right"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-           /> 
+           />
 
 	</RelativeLayout>
  
     <TextView
         android:id="@+id/tvTitle"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/llThumbnail"
         android:textColor="@color/list_item_title"
         android:gravity="top"
-        android:padding="10dp"/>
-    
-     <TextView
-        android:id="@+id/tvPubDate"
-        android:textSize="10sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/llThumbnail"
-        android:textColor="@color/list_item_title"
-        android:layout_below="@+id/tvTitle"
-        android:layout_alignParentLeft="true"
-        android:padding="10dp" />
-     
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
+
+  <TextView
+    android:id="@+id/tvPubDate"
+    android:textSize="10sp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="@color/list_item_title"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@+id/tvTitle"
+    android:padding="10dp" />
 
     
 </RelativeLayout>

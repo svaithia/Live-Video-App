@@ -27,7 +27,6 @@ public class PlaylistScrapper extends AsyncTask<Void, Void, List<PlaylistBean>> 
   private int height;
   private Callback callback;
   private List<PlaylistBean> parseXMLAndStoreIt(XmlPullParser myParser) {
-    int eventType;
     List<PlaylistBean> playlistUrlBeans = new ArrayList<PlaylistBean>();
 
     try {

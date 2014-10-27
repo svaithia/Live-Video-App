@@ -35,8 +35,6 @@ public class BrowseFragment extends Fragment implements SectionScrapper.Callback
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-//    SectionScrapper sectionScrapper = new SectionScrapper(this);
-//    sectionScrapper.execute();
   }
 
   @Override
