@@ -40,3 +40,10 @@ build/
 *~
 *.swp
 
+
+.idea/
+.gradle/
+*.iml
+build/
+local.properties
+
