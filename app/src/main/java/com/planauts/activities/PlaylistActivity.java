@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.amplitude.api.Amplitude;
 import com.planauts.bean.PlaylistBean;
 import com.planauts.bean.SectionBean;
 import com.planauts.common.Constants;
@@ -46,6 +47,18 @@ public class PlaylistActivity extends ActionBarActivity implements PlaylistScrap
     PlaylistScrapper playlistScrapper = new PlaylistScrapper(sectionBean.url, quality, this);
     playlistScrapper.execute();
 
+  }
+
+  @Override
+  protected void onResume() {
+    super.onPostResume();
+    Amplitude.startSession();
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    Amplitude.endSession();
   }
 
   @Override

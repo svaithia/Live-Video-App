@@ -5,9 +5,11 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "com.planauts.wsj"
+        applicationId "com.planauts.wall.street.videos"
         minSdkVersion 11
         targetSdkVersion 20
+        versionCode 3
+        versionName "2.1"
     }
 
     buildTypes {

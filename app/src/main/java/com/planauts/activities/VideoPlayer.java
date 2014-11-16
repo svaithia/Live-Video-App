@@ -1,5 +1,6 @@
 package com.planauts.activities;
 
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
@@ -9,7 +10,6 @@ import android.support.v4.view.ActionProvider;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +20,7 @@ import com.planauts.bean.PlaylistBean;
 import com.planauts.common.Constants;
 import com.planauts.wsj.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VideoPlayer extends ActionBarActivity implements OnCompletionListener, OnPreparedListener, MediaPlayer.OnErrorListener {
@@ -41,7 +42,13 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
     Bundle e = getIntent().getExtras();
     if(e != null){
       List<PlaylistBean> playlistArr = e.getParcelableArrayList(INTENT_VIDEOS);
-      playlistArray = playlistArr.toArray(new PlaylistBean[playlistArr.size()]);
+      List<PlaylistBean> validPlaylistArray = new ArrayList<PlaylistBean>();
+      for(PlaylistBean playlistBean : playlistArr){
+        if(!playlistBean.url.equals("")) {
+          validPlaylistArray.add(playlistBean);
+        }
+      }
+      playlistArray = validPlaylistArray.toArray(new PlaylistBean[validPlaylistArray.size()]);
     }
 
     vvPlayer.setOnCompletionListener(this);
@@ -110,6 +117,12 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
   }
 
   @Override
+  protected void onPause() {
+    super.onPause();
+    Amplitude.endSession();
+  }
+
+  @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.video_player, menu);
     MenuItem item = menu.findItem(R.id.menu_item_share);
@@ -117,8 +130,8 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
     MenuItemCompat.setActionProvider(item, myShareActionProvider);
 
     if(myShareActionProvider != null){
-      String currentTitle = playlistArray[currentPosition].title;
-      myShareActionProvider.setShareIntent(Constants.setUpShareIntent(getString(R.string.share_default_message, currentTitle)));
+      PlaylistBean playlistItem = playlistArray[currentPosition];
+      myShareActionProvider.setShareIntent(Constants.setUpShareIntent(shareMessage(playlistItem)));
       myShareActionProvider.setSubUiVisibilityListener(new ActionProvider.SubUiVisibilityListener() {
         @Override
         public void onSubUiVisibilityChanged(boolean b) {
@@ -132,9 +145,19 @@ public class VideoPlayer extends ActionBarActivity implements OnCompletionListen
     return true;
   }
 
+  private String shareMessage(PlaylistBean item){
+    SharedPreferences myPrefs = this.getSharedPreferences(SettingsActivity.SETTINGS, MODE_PRIVATE);
+    String shareMessage = myPrefs.getString(SettingsActivity.DEFAULT_SHARE, getString(R.string.share_default_message));
+
+    for(int i = 0; i < item.properties.length; i++){
+      shareMessage = shareMessage.replaceAll("@" + item.properties[i], item.getProperties(i));
+    }
+
+    return shareMessage;
+  }
+
   @Override
   public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
-    Log.e(TAG, "onError MediaPlayer");
     Amplitude.logEvent("onError MediaPlayer");
     return false;
   }

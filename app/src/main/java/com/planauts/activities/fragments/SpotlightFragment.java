@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +15,9 @@ import com.planauts.activities.SettingsActivity;
 import com.planauts.bean.PlaylistBean;
 import com.planauts.common.Constants;
 import com.planauts.listadapters.SpotlightListAdapter;
-import com.planauts.listadapters.VideoListAdapter;
 import com.planauts.scrapper.PlaylistScrapper;
 import com.planauts.wsj.R;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -47,17 +44,19 @@ public class SpotlightFragment  extends Fragment {
     int quality_index = sharedpreferences.getInt(SettingsActivity.QUALITY, 1);
     int quality = Constants.VIDEO_RESOLUTION_ID[quality_index];
 
+    final SpotlightListAdapter spotlightListAdapter = new SpotlightListAdapter(getActivity());
+    lvVideos.setAdapter(spotlightListAdapter);
+    lvVideos.setOnItemClickListener(spotlightListAdapter);
+
     // URL 1
-    for(int i = 0; i < 1; i++) {
-      PlaylistScrapper playlistScrapper = new PlaylistScrapper(Constants.SPOTLIGHT_URL[i], quality, new PlaylistScrapper.Callback() {
+    for(int i = 0; i < Constants.SPOTLIGHT_URL.length; i++) {
+      final int index = i;
+      PlaylistScrapper playlistScrapper = new PlaylistScrapper(Constants.SPOTLIGHT_URL[index], quality, new PlaylistScrapper.Callback() {
         @Override
         public void success(List<PlaylistBean> playlistBeans) {
-          Log.e(TAG, "SUCCESS " + playlistBeans.size());
           progressbar.setVisibility(View.GONE);
-          VideoListAdapter spotlightListAdapter = new VideoListAdapter(getActivity(), playlistBeans);
-//          SpotlightListAdapter spotlightListAdapter = new SpotlightListAdapter(getActivity(), Arrays.asList(Constants.SPOTLIGHT_URL_ID), playlistBeans);
-          lvVideos.setAdapter(spotlightListAdapter);
-          lvVideos.setOnItemClickListener(spotlightListAdapter);
+          spotlightListAdapter.addSectionHeaderItem(new PlaylistBean(Constants.SPOTLIGHT_URL_ID[index], "", "", "", "", 0), false);
+          spotlightListAdapter.addItem(playlistBeans, true);
         }
 
         @Override

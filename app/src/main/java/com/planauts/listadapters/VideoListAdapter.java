@@ -11,10 +11,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amplitude.api.Amplitude;
 import com.androidquery.AQuery;
 import com.planauts.activities.VideoPlayer;
 import com.planauts.bean.PlaylistBean;
 import com.planauts.wsj.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +78,13 @@ public class VideoListAdapter extends BaseAdapter implements AdapterView.OnItemC
       PlaylistBean entry = getItem(i % (getCount()));
       playlistBeanArrayList.add(entry);
     }
+
+    JSONObject eventProperties = new JSONObject();
+    try {
+      eventProperties.put("video", getItem(position).url);
+    } catch (JSONException exception) {
+    }
+    Amplitude.logEvent("Video List Adapter Clicked Event", eventProperties);
 
     Intent videoPlaybackActivity = new Intent(mContext, VideoPlayer.class);
     videoPlaybackActivity.putParcelableArrayListExtra(VideoPlayer.INTENT_VIDEOS, playlistBeanArrayList);

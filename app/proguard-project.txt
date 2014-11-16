@@ -6,7 +6,6 @@
 -dontshrink
 -verbose
 
--injars bin/classes
 -injars libs
 -outjars bin/classes-processed.jar
 

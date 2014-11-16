@@ -961,7 +961,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f070015;
         public static final int action_menu_presenter=0x7f070016;
         public static final int action_mode_close_button=0x7f070024;
-        public static final int action_settings=0x7f070054;
+        public static final int action_settings=0x7f070053;
         public static final int activity_chooser_view_content=0x7f070025;
         public static final int always=0x7f07000f;
         public static final int bSaveSettings=0x7f07004a;
@@ -989,14 +989,14 @@ containing a value of this type.
         public static final int left_drawer=0x7f070046;
         public static final int listMode=0x7f070001;
         public static final int list_item=0x7f070029;
-        public static final int llPlayerContainer=0x7f070052;
+        public static final int llPlayerContainer=0x7f070051;
         public static final int llThumbnail=0x7f07004d;
         public static final int lvSectionList=0x7f070042;
         public static final int lvVideos=0x7f07003e;
-        public static final int menu_item_settings=0x7f070056;
-        public static final int menu_item_share=0x7f070055;
+        public static final int menu_item_settings=0x7f070055;
+        public static final int menu_item_share=0x7f070054;
         public static final int middle=0x7f07000b;
-        public static final int myvideoview=0x7f070053;
+        public static final int myvideoview=0x7f070052;
         public static final int never=0x7f07000d;
         public static final int none=0x7f070009;
         public static final int normal=0x7f070000;
@@ -1029,8 +1029,7 @@ containing a value of this type.
         public static final int title=0x7f07002b;
         public static final int top_action_bar=0x7f070020;
         public static final int tvDuration=0x7f07004f;
-        public static final int tvPubDate=0x7f070051;
-        public static final int tvSpotlightCategory=0x7f070050;
+        public static final int tvPubDate=0x7f070050;
         public static final int tvTitle=0x7f070047;
         public static final int txtLabel=0x7f070043;
         public static final int up=0x7f070021;

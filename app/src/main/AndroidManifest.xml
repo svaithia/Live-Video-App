@@ -14,7 +14,7 @@
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
 
         <activity
-            android:name="com.planauts.activities.MainAct"
+            android:name="com.planauts.activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,17 +28,14 @@
         android:label="@string/app_name"
         android:launchMode="singleTask"
         android:theme="@style/CustomActionBarTheme"
-        android:screenOrientation="landscape" ></activity>
+        android:screenOrientation="landscape"/>
 
       <activity
         android:name="com.planauts.activities.SettingsActivity"
-        android:label="@string/app_name"></activity>
-      <activity
-        android:name="com.planauts.activities.MainActivity"
-        android:label="@string/app_name"></activity>
+        android:label="@string/app_name"/>
       <activity
         android:name="com.planauts.activities.PlaylistActivity"
-        android:label="@string/app_name"></activity>
+        android:label="@string/app_name"/>
     </application>
 
 </manifest>

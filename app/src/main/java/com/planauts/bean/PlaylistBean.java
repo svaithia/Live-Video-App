@@ -26,6 +26,22 @@ public class PlaylistBean implements Parcelable {
   public final int duration;
   public String TAG = PlaylistBean.class.getSimpleName();
 
+  public static final String[] properties = {"title", "description", "url"};
+  public String getProperties(int i){
+    switch(i){
+      case 0:{
+        return title;
+      }
+      case 1:{
+        return description;
+      }
+      case 2:{
+        return url;
+      }
+    }
+    return title;
+  }
+
   public PlaylistBean(String t, String d, String u, String i, String pd, int dur){
     title = t;
     description = d;
